@@ -13,7 +13,7 @@ from pyspark.ml.linalg import DenseVector
 from pyspark.ml.feature import StandardScaler
 from pyspark.ml.regression import LinearRegression
 import pandas as pd
-
+import numpy as np
 from pyspark.ml.classification import LogisticRegression
 
 from pyspark.sql import SparkSession
@@ -26,7 +26,7 @@ from FeaturesMakers.MulticlassLabelAssigner import MulticlassLabelAssigner
 
 from pyspark.ml.classification import LogisticRegression, OneVsRest
 from pyspark.ml.evaluation import MulticlassClassificationEvaluator
-
+from pyspark.sql.types import StructField,StructType,DoubleType
 
 argsArr = sys.argv[1:]
 argsDict = dict()
@@ -82,10 +82,11 @@ input_data_df = sqlCtx.createDataFrame(input_data_pd)
 
 
 multiclassLabelAssigner = MulticlassLabelAssigner()
-
-input_data_PipelinedRDD = input_data_df.rdd.map(lambda x: (multiclassLabelAssigner.assign(x[-1]), DenseVector(x[:-1])))
+f_to_float64 = lambda x: np.array(x).astype(np.float64)
+input_data_PipelinedRDD = input_data_df.rdd.map(lambda x: (multiclassLabelAssigner.assign(x[-1]), DenseVector(f_to_float64(x[:-1]))))
 input_data_LabeledData = sqlCtx.createDataFrame(input_data_PipelinedRDD, ["label", "features"])
-
+input_data_LabeledData.printSchema()
+# input_data_LabeledData.show(151,truncate=False)
 (train, test) = input_data_LabeledData.randomSplit([0.8, 0.2])
 logisticR = LogisticRegression(maxIter=10)#, regParam=0.3, elasticNetParam=0.8)
 
@@ -103,6 +104,7 @@ crossval = CrossValidator(estimator=ovr,
                           estimatorParamMaps=paramGrid,
                           evaluator=modelEvaluator,
                           numFolds=3)
+
 
 cvModel = crossval.fit(train)
 

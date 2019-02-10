@@ -7,7 +7,7 @@ class MulticlassLabelAssigner():
         if inputTxt in self.labelDict:
             return self.labelDict.get(inputTxt)
         else:
-            self.maxIndex += 1
+            self.maxIndex = self.maxIndex + 1
             self.labelDict[inputTxt] = self.maxIndex
             return self.labelDict.get(inputTxt)
 
