@@ -1,0 +1,16 @@
+# Keeping Track of Things
+# Feb 10, 2019
+
+## 1. Make sure we're all connected via github; ensure everyone can load in the data
+
+
+## 2. Make a plan of attack 
+    a. What questions? 
+    b. Who is doing what?
+    c. Ground-rules/structure for working together
+        i. Meeting times (regular time to meet?) and expectations
+        ii. Working with Github -- things to do/do not
+    d. Date/plan
+    
+## 3. Document problems and solutions here:
+    a. Error when running the toy example code
