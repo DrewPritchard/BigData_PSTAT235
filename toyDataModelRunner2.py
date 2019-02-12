@@ -103,7 +103,7 @@ paramGrid = ParamGridBuilder().addGrid(logisticR.regParam,
 # ovr = OneVsRest(classifier=logisticR)
 
 
-crossval = CrossValidator(estimator=logisticR,
+crossval = CrossValidator(estimator=pipeline,
                           estimatorParamMaps=paramGrid,
                           evaluator=modelEvaluator,
                           numFolds=3)
