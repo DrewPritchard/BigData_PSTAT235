@@ -6,5 +6,6 @@
 /.idea/
 /.idea/*
 *.ipynb
+!rentalPrice_jonas.ipynb
 **/__pycache__
 __pycache__
