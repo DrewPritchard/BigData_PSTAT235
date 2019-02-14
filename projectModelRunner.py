@@ -19,7 +19,6 @@ from pyspark.ml.classification import LogisticRegression
 from pyspark.sql import SparkSession
 from pyspark.ml import Pipeline
 from pyspark.ml.linalg import Vectors
-from pyspark.ml.evaluation import RegressionEvaluator
 from pyspark.ml.regression import LinearRegression
 from pyspark.ml.tuning import CrossValidator, ParamGridBuilder
 from FeaturesMakers.MulticlassLabelAssigner import MulticlassLabelAssigner
@@ -61,9 +60,10 @@ for inputToken in argsArr:
 
 Logger.logger.info(argsDict)
 
-doTest = str(argsDict.get("doTest")).lower()
-if doTest != "true" or doTest != "false":
-    doTest = True
+doTest = argsDict.get("doTest", True)
+
+finalClassifier = argsDict.get("finalClassifier", "LogisticRegression")
+
 
 spark = SparkSession \
     .builder \
@@ -82,11 +82,12 @@ from Miscellaneous.ModelPipConfig import PipConfig
 
 
 if doTest:
+    Logger.logger.info("Testing the model performance")
     input_data_pd = pd.read_json("data/train.json")
     input_data_pd["bedrooms"]+=0.0
     input_data_pd["created"] = input_data_pd["created"].apply(lambda s: time.mktime(datetime.datetime.strptime(s, "%Y-%m-%d %H:%M:%S").timetuple()))
     input_data_pd["price"] += 0.0
-    multiclassLabelAssigner = MulticlassLabelAssigner()
+    multiclassLabelAssigner = MulticlassLabelAssigner(["high", "medium", "low"])
     input_data_pd["interest_level"] = input_data_pd["interest_level"].apply(lambda s: multiclassLabelAssigner.assign(inputTxt=s))
 
     # input_data_pd[["bedrooms"]] = input_data_pd[["bedrooms"]].apply(pd.to_numeric(downcast='float'))
@@ -116,30 +117,97 @@ if doTest:
 
     logisticR = LogisticRegression(maxIter=20, family="multinomial")#, regParam=0.3, elasticNetParam=0.8)
 
-    modelEvaluator = RegressionEvaluator()
     pipelineConfig = PipConfig()
 
-    pipeline = Pipeline(stages=pipelineConfig.getStages())
+    pipStages = pipelineConfig.getStages(finalClassifier)
+    Logger.logger.info("pipeline stages used: " + str(pipStages))
+    pipeline = Pipeline(stages=pipStages)
 
-
-
-    Logger.logger.info("pipeline stages used: " + str(pipelineConfig.getStages()))
-
-    crossval = CrossValidator(estimator=pipeline,
-                              estimatorParamMaps=pipelineConfig.getParamGrid(),
-                              evaluator=modelEvaluator,
-                              numFolds=3)
-
-    # model = pipeline.fit(train)
-
-
-    cvModel = crossval.fit(train)
-    predictions = cvModel.transform(test)
-    predictions.orderBy('bathrooms', ascending=False).show(10, truncate=False)
+    pipModel = pipeline.fit(train)
+    predictions = pipModel.transform(test)
+    predictions.select(["listing_id","label","probability","prediction"]).show(10, truncate=False)
     evaluator = MulticlassClassificationEvaluator(metricName="accuracy")
 
     accuracy = evaluator.evaluate(predictions)
     Logger.logger.info("Test Error = %g" % (1.0 - accuracy))
+
+else:
+    Logger.logger.info("Doing the real prediction")
+    input_data_pd_train = pd.read_json("data/train.json")
+    input_data_pd_train["bedrooms"]+=0.0
+    input_data_pd_train["created"] = input_data_pd_train["created"].apply(lambda s: time.mktime(datetime.datetime.strptime(s, "%Y-%m-%d %H:%M:%S").timetuple()))
+    input_data_pd_train["price"] += 0.0
+
+    input_data_pd_test = pd.read_json("data/test.json")
+    input_data_pd_test["bedrooms"]+=0.0
+    input_data_pd_test["created"] = input_data_pd_test["created"].apply(lambda s: time.mktime(datetime.datetime.strptime(s, "%Y-%m-%d %H:%M:%S").timetuple()))
+    input_data_pd_test["price"] += 0.0
+
+
+    multiclassLabelAssigner = MulticlassLabelAssigner(["high", "medium", "low"])
+    input_data_pd_train["interest_level"] = input_data_pd_train["interest_level"].apply(lambda s: multiclassLabelAssigner.assign(inputTxt=s))
+
+    # input_data_pd[["bedrooms"]] = input_data_pd[["bedrooms"]].apply(pd.to_numeric(downcast='float'))
+    schemaTrain = StructType([StructField('bathrooms', DoubleType(), True),
+                         StructField('bedrooms', DoubleType(), True),
+                         StructField('building_id', StringType(), True),
+                         StructField('created', DoubleType(), True),
+                         StructField('description', StringType(), True),
+                         StructField('display_address', StringType(), True),
+                         StructField('featuresList', ArrayType(StringType(), True), True),
+                         StructField('latitude', DoubleType(), True),
+                         StructField('listing_id', LongType(), True),
+                         StructField('longitude', DoubleType(), True),
+                         StructField('manager_id', StringType(), True),
+                         StructField('photos', ArrayType(StringType(), True), True),
+                         StructField('price', DoubleType(), True),
+                         StructField('street_address', StringType(), True),
+                         StructField('label', IntegerType(), True)])
+
+    schemaTest = StructType([StructField('bathrooms', DoubleType(), True),
+                         StructField('bedrooms', DoubleType(), True),
+                         StructField('building_id', StringType(), True),
+                         StructField('created', DoubleType(), True),
+                         StructField('description', StringType(), True),
+                         StructField('display_address', StringType(), True),
+                         StructField('featuresList', ArrayType(StringType(), True), True),
+                         StructField('latitude', DoubleType(), True),
+                         StructField('listing_id', LongType(), True),
+                         StructField('longitude', DoubleType(), True),
+                         StructField('manager_id', StringType(), True),
+                         StructField('photos', ArrayType(StringType(), True), True),
+                         StructField('price', DoubleType(), True),
+                         StructField('street_address', StringType(), True)])
+
+    input_data_df_train = sqlCtx.createDataFrame(input_data_pd_train, schemaTrain)
+    input_data_df_test = sqlCtx.createDataFrame(input_data_pd_test, schemaTest)
+
+    input_data_df_train.printSchema()
+    input_data_df_test.printSchema()
+    input_data_df_train.show(10)
+
+    train = input_data_df_train
+    test = input_data_df_test
+
+    logisticR = LogisticRegression(maxIter=20, family="multinomial")#, regParam=0.3, elasticNetParam=0.8)
+
+    pipelineConfig = PipConfig()
+
+    pipStages = pipelineConfig.getStages(finalClassifier)
+    Logger.logger.info("pipeline stages used: " + str(pipStages))
+    pipeline = Pipeline(stages=pipStages)
+
+    pipModel = pipeline.fit(train)
+    predictions = pipModel.transform(test)
+    finalOutput = predictions.select(["listing_id","probability"])
+    finalOutput.show(10, truncate=False)
+    # finalOutput.printSchema()
+
+    # evaluator = MulticlassClassificationEvaluator(metricName="accuracy")
+    #
+    # accuracy = evaluator.evaluate(predictions)
+    # Logger.logger.info("Test Error = %g" % (1.0 - accuracy))
+
 
 
     # trainingSummary = cvModel.bestModel.summary
