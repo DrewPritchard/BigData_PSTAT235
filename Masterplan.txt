@@ -1,16 +1,30 @@
 # Keeping Track of Things
-# Feb 10, 2019
+# Feb 14, 2019
 
 ## 1. Make sure we're all connected via github; ensure everyone can load in the data
 
 
 ## 2. Make a plan of attack 
-    a. What questions? 
+    a. Question:
+        1. Can we predict interest in rentals? 
+            1.i Which model is better -- multinomial regression or random forest?
+            1.ii Which predictors are most important?
+        2. <Others>
+        
     b. Who is doing what?
+        Xining -- working on code for regression and model testing/training
+        Jonas -- the features column (amenities)
+        Drew -- spatial aspects
+        Georgia -- text analysis for description
+        
     c. Ground-rules/structure for working together
         i. Meeting times (regular time to meet?) and expectations
         ii. Working with Github -- things to do/do not
-    d. Date/plan
     
+    d. Date/plan
+        Next meeting is after section on Tuesday, Feb 19th
+        To do -- Georgia needs to review the methods in R for random forests
+        
 ## 3. Document problems and solutions here:
     a. Error when running the toy example code
+        Solution -- Xining will probably run the model on local computer to generate results. We should all verify that we can also run the model on our own laptops.
