@@ -60,7 +60,6 @@ Logger.logger.info(argsDict)
 
 
 
-
 spark = SparkSession \
     .builder \
     .master("local") \
