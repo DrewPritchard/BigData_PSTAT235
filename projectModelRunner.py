@@ -30,6 +30,7 @@ from pyspark.sql.types import StructField,StructType,DoubleType,ArrayType
 import time
 import datetime
 
+
 argsArr = sys.argv[1:]
 argsDict = dict()
 
@@ -77,7 +78,7 @@ spark = SparkSession \
 sc = SparkContext.getOrCreate()
 sqlCtx = SQLContext(sc)
 
-from Miscellaneous import pipelineStages
+from Miscellaneous.ModelPipConfig import PipConfig
 
 
 if doTest:
@@ -106,38 +107,35 @@ if doTest:
                          StructField('label', IntegerType(), True)])
 
     input_data_df = sqlCtx.createDataFrame(input_data_pd, schema)
-    print(input_data_df.count())
+    Logger.logger.info(input_data_df.count())
     input_data_df.printSchema()
 
-    input_data_df.printSchema()
     input_data_df.show(10)
     # input_data_LabeledData.show(151,truncate=False)
     (train, test) = input_data_df.randomSplit([0.8, 0.2])
 
     logisticR = LogisticRegression(maxIter=20, family="multinomial")#, regParam=0.3, elasticNetParam=0.8)
 
-
-    pipeline = Pipeline(stages= pipelineStages.stages )
-
-    paramGrid = ParamGridBuilder().addGrid(logisticR.regParam,
-                                           [0.1, 0.01]).addGrid(logisticR.elasticNetParam,
-                                                                [0, 1]).build()
-
-
     modelEvaluator = RegressionEvaluator()
+    pipelineConfig = PipConfig()
+
+    pipeline = Pipeline(stages=pipelineConfig.getStages())
+
+
+
+    Logger.logger.info("pipeline stages used: " + str(pipelineConfig.getStages()))
 
     crossval = CrossValidator(estimator=pipeline,
-                              estimatorParamMaps=paramGrid,
+                              estimatorParamMaps=pipelineConfig.getParamGrid(),
                               evaluator=modelEvaluator,
                               numFolds=3)
 
     # model = pipeline.fit(train)
 
-    # print(train.take(1)[0]["features"])
 
     cvModel = crossval.fit(train)
     predictions = cvModel.transform(test)
-    predictions.show(10, truncate=False)
+    predictions.orderBy('bathrooms', ascending=False).show(10, truncate=False)
     evaluator = MulticlassClassificationEvaluator(metricName="accuracy")
 
     accuracy = evaluator.evaluate(predictions)
