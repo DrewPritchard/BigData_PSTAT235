@@ -69,14 +69,13 @@ class OutlierSmoother(Transformer):
         new_df = None
         df = df.withColumn("outlierSmotherRowId", monotonically_increasing_id())
 
-        df.show()
 
         for j in range(len(self.inputCols)):
             tmpColList = df.select([self.inputCols[j]]).rdd.map(lambda r: r[0]).collect()
             tmpColListNpArr = np.array(tmpColList)
             outliersQList = self.is_outlier(tmpColListNpArr, self.thresh)
 
-            Logger.logger.info(str(sum(outliersQList)) + " outliers in column \'" + self.inputCols[j] + "\' has been removed")
+            Logger.logger.info(str(sum(outliersQList)) + " outliers in column \'" + self.inputCols[j] + "\' has been smoothened")
 
             outlierIndices = np.where(outliersQList)[0]
             notOutliersQList = np.array([not j for j in outliersQList])
@@ -86,9 +85,6 @@ class OutlierSmoother(Transformer):
 
             for outlierIndex in outlierIndices:
                 tmpColListNpArr[outlierIndex] = tmpColListAvg
-
-
-
 
             tmpColListNpArrFinal = tmpColListNpArr.tolist()
             tmpColListNpArrDict = dict()
@@ -102,17 +98,6 @@ class OutlierSmoother(Transformer):
             udfValueToCategory = udf(valueToCategory, FloatType())
 
             df = df.withColumn(self.outputCols[j], udfValueToCategory("outlierSmotherRowId"))
-
-            # df.withColumn
-            # newCol = sc.parallelize(tmpColListNpArrFinal.tolist())
-            # newRow = Row(self.outputCols[j])
-            # l_as_df = newCol.map(newRow).toDF()
-            # new_df = df.union(l_as_df)
-
-            # This will return a new DF with all the columns + id
-
-        # print("printing the schema for validation")
-        # df.printSchema()
 
         return df
 
