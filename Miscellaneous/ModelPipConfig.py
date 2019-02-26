@@ -9,6 +9,7 @@ from pyspark.ml.evaluation import RegressionEvaluator
 
 from pyspark.ml.feature import StandardScaler
 from Miscellaneous.Logger import Logger
+from FeaturesMakers.OutlierSmoother import OutlierSmoother
 
 class PipConfig(object):
 
@@ -25,7 +26,17 @@ class PipConfig(object):
                           inputCols=["bathrooms", "bedrooms", "created", "price"],
                           outputCols=["out_bathrooms", "out_bedrooms", "out_created", "out_price"])
 
-        assembler = VectorAssembler(inputCols=["out_bathrooms", "out_bedrooms", "out_created", "out_price"],
+        outlierSmoother = OutlierSmoother(thresh=3.5,
+                                          inputCols=["latitude", "longitude"],
+                                          outputCols=["out_latitude", "out_longitude"])
+
+
+        assembler = VectorAssembler(inputCols=["out_bathrooms",
+                                               "out_bedrooms",
+                                               "out_created",
+                                               "out_price",
+                                               "out_latitude",
+                                               "out_longitude"],
                                     outputCol="features")
 
         self.modelEvaluator = MulticlassClassificationEvaluator(predictionCol="prediction")
@@ -45,7 +56,7 @@ class PipConfig(object):
             self.paramGrid = ParamGridBuilder().addGrid(rf.numTrees, [3,10]).build()
             self.estimator = rf
 
-        self.stages = [imputer, assembler,self.estimator]
+        self.stages = [imputer, outlierSmoother, assembler, self.estimator]
 
     def getStages(self):
         return self.stages
