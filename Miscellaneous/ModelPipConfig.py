@@ -12,10 +12,14 @@ from Miscellaneous.Logger import Logger
 
 class PipConfig(object):
 
-    def __init__(self):
-        return
-
-    def getStages(self, method="LogisticRegression"):
+    def __init__(self, method=None):
+        self.estimator = None
+        self.paramGrid = None
+        if method is None:
+            self.method = "LogisticRegression"
+        else:
+            self.method = method
+        self.stages = None
 
         imputer = Imputer(strategy="mean",
                           inputCols=["bathrooms", "bedrooms", "created", "price"],
@@ -24,33 +28,33 @@ class PipConfig(object):
         assembler = VectorAssembler(inputCols=["out_bathrooms", "out_bedrooms", "out_created", "out_price"],
                                     outputCol="features")
 
+        self.modelEvaluator = MulticlassClassificationEvaluator(predictionCol="prediction")
 
-        modelEvaluator = MulticlassClassificationEvaluator()
-
-        estimator = None
-        paramGrid = None
-
-        if method == "LogisticRegression":
+        if self.method == "LogisticRegression":
             Logger.logger.info("Using the logistic regression")
             logisticR = LogisticRegression(maxIter=20, family="multinomial")  # , regParam=0.3, elasticNetParam=0.8)
 
-            paramGrid = ParamGridBuilder().addGrid(logisticR.regParam,
+            self.paramGrid = ParamGridBuilder().addGrid(logisticR.regParam,
                                                    [0.1, 0.01]).addGrid(logisticR.elasticNetParam,
                                                                         [0, 1]).build()
-            estimator = logisticR
+            self.estimator = logisticR
 
-
-        if method == "RandomForest":
+        if self.method == "RandomForest":
             Logger.logger.info("Using the RandomForest")
             rf = RandomForestClassifier()
-            paramGrid = ParamGridBuilder().addGrid(rf.numTrees, [3,10]).build()
-            estimator = rf
+            self.paramGrid = ParamGridBuilder().addGrid(rf.numTrees, [3,10]).build()
+            self.estimator = rf
 
+        self.stages = [imputer, assembler,self.estimator]
 
-        crossval = CrossValidator(estimator=estimator,
-                                  estimatorParamMaps=paramGrid,
-                                  evaluator=modelEvaluator,
-                                  numFolds=5)
-        stages = [imputer, assembler, crossval]
-        return stages
+    def getStages(self):
+        return self.stages
 
+    def getParamGrid(self):
+        return self.paramGrid
+
+    def getEstimator(self):
+        return self.estimator
+
+    def getModelEvaluator(self):
+        return self.modelEvaluator

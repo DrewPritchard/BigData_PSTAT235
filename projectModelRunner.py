@@ -15,12 +15,14 @@ from pyspark.ml.regression import LinearRegression
 import pandas as pd
 import numpy as np
 from pyspark.ml.classification import LogisticRegression
+from sklearn.metrics import confusion_matrix
 
 from pyspark.sql import SparkSession
 from pyspark.ml import Pipeline
 from pyspark.ml.linalg import Vectors
 from pyspark.ml.regression import LinearRegression
 from pyspark.ml.tuning import CrossValidator, ParamGridBuilder
+
 from FeaturesMakers.MulticlassLabelAssigner import MulticlassLabelAssigner
 
 from pyspark.ml.classification import LogisticRegression, OneVsRest
@@ -68,14 +70,16 @@ finalClassifier = argsDict.get("finalClassifier", "LogisticRegression")
 spark = SparkSession \
     .builder \
     .master("local") \
-    .appName("wisc_breast_cancer_analysis") \
-    .config("spark.executor.memory", '8g') \
-    .config('spark.executor.cores', '4') \
-    .config('spark.cores.max', '4') \
-    .config("spark.driver.memory",'8g') \
+    .appName("pstat235final") \
+    .config("spark.executor.memory", '4g') \
+    .config('spark.executor.cores', '1') \
+    .config('spark.cores.max', '1') \
+    .config("spark.driver.memory",'1g') \
     .getOrCreate()
 
 sc = SparkContext.getOrCreate()
+sc.setLogLevel("ERROR")
+
 sqlCtx = SQLContext(sc)
 
 from Miscellaneous.ModelPipConfig import PipConfig
@@ -115,21 +119,42 @@ if doTest:
     # input_data_LabeledData.show(151,truncate=False)
     (train, test) = input_data_df.randomSplit([0.8, 0.2])
 
-    logisticR = LogisticRegression(maxIter=20, family="multinomial")#, regParam=0.3, elasticNetParam=0.8)
 
-    pipelineConfig = PipConfig()
 
-    pipStages = pipelineConfig.getStages(finalClassifier)
-    Logger.logger.info("pipeline stages used: " + str(pipStages))
-    pipeline = Pipeline(stages=pipStages)
 
-    pipModel = pipeline.fit(train)
-    predictions = pipModel.transform(test)
+    pipelineConfig = PipConfig(finalClassifier)
+
+    Logger.logger.info("pipeline stages used: " + str(pipelineConfig.getStages()))
+
+    crossval = CrossValidator(estimator=Pipeline(stages=pipelineConfig.getStages()),
+                              estimatorParamMaps=pipelineConfig.getParamGrid(),
+                              evaluator=pipelineConfig.getModelEvaluator(),
+                              numFolds=5)
+
+    crossvalModel = crossval.fit(train)
+    predictions = crossvalModel.transform(test)
+    finalOutput = predictions.select(["listing_id","probability"])
     predictions.select(["listing_id","label","probability","prediction"]).show(10, truncate=False)
     evaluator = MulticlassClassificationEvaluator(metricName="accuracy")
 
     accuracy = evaluator.evaluate(predictions)
     Logger.logger.info("Test Error = %g" % (1.0 - accuracy))
+
+
+    def log_loss(results_transformed, label="label", probability="probability"):
+        labs_and_preds = results_transformed[label, probability]
+        return - labs_and_preds \
+            .rdd \
+            .map(lambda x: np.log(x[1][x[0]])) \
+            .reduce(lambda x, y: x + y) / labs_and_preds.count()
+
+
+    Logger.logger.info("Log Loss = %g" % log_loss(predictions.select(["label", "probability"])))
+
+    test_confusion_matrix_pd = predictions.select("label", "prediction").toPandas()
+    cnf_matrix = confusion_matrix(test_confusion_matrix_pd["label"], test_confusion_matrix_pd["prediction"])
+    Logger.logger.info("Here is the confusion matrix with both row and column indices as: high, medium, low")
+    Logger.logger.info(cnf_matrix)
 
 else:
     Logger.logger.info("Doing the real prediction")
@@ -191,15 +216,18 @@ else:
 
     logisticR = LogisticRegression(maxIter=20, family="multinomial")#, regParam=0.3, elasticNetParam=0.8)
 
-    pipelineConfig = PipConfig()
+    pipelineConfig = PipConfig(finalClassifier)
 
-    pipStages = pipelineConfig.getStages(finalClassifier)
-    Logger.logger.info("pipeline stages used: " + str(pipStages))
-    pipeline = Pipeline(stages=pipStages)
+    Logger.logger.info("pipeline stages used: " + str(pipelineConfig.getStages()))
 
-    pipModel = pipeline.fit(train)
-    predictions = pipModel.transform(test)
-    finalOutput = predictions.select(["listing_id","probability"])
+    crossval = CrossValidator(estimator=Pipeline(stages=pipelineConfig.getStages()),
+                              estimatorParamMaps=pipelineConfig.getParamGrid(),
+                              evaluator=pipelineConfig.getModelEvaluator(),
+                              numFolds=5)
+
+    crossvalModel = crossval.fit(train)
+    predictions = crossvalModel.transform(test)
+    finalOutput = predictions.select(["listing_id", "probability"])
     finalOutput.show(10, truncate=False)
     # finalOutput.printSchema()
 
