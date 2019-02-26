@@ -67,8 +67,11 @@ class OutlierSmoother(Transformer):
         tmpColListNpArrFinal = None
         sc = SparkContext.getOrCreate()
         new_df = None
-        df = df.withColumn("outlierSmotherRowId", monotonically_increasing_id())
-
+        outlierSmotherRowIdColName = "outlierSmotherRowId"
+        if outlierSmotherRowIdColName not in df.schema.names:
+            df = df.withColumn(outlierSmotherRowIdColName, monotonically_increasing_id())
+        else:
+            outlierSmotherRowIdColName = "outlierSmotherRowId4" + "_".join(df.schema.names)
 
         for j in range(len(self.inputCols)):
             tmpColList = df.select([self.inputCols[j]]).rdd.map(lambda r: r[0]).collect()
@@ -96,8 +99,8 @@ class OutlierSmoother(Transformer):
                 return tmpColListNpArrDict.get(value)
 
             udfValueToCategory = udf(valueToCategory, FloatType())
+            df = df.withColumn(self.outputCols[j], udfValueToCategory(outlierSmotherRowIdColName))
 
-            df = df.withColumn(self.outputCols[j], udfValueToCategory("outlierSmotherRowId"))
-
+        df = df.drop(outlierSmotherRowIdColName)
         return df
 

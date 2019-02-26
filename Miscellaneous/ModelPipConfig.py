@@ -10,6 +10,8 @@ from pyspark.ml.evaluation import RegressionEvaluator
 from pyspark.ml.feature import StandardScaler
 from Miscellaneous.Logger import Logger
 from FeaturesMakers.OutlierSmoother import OutlierSmoother
+from pyspark.ml.clustering import GaussianMixture
+from pyspark.ml.feature import OneHotEncoder
 
 class PipConfig(object):
 
@@ -26,17 +28,29 @@ class PipConfig(object):
                           inputCols=["bathrooms", "bedrooms", "created", "price"],
                           outputCols=["out_bathrooms", "out_bedrooms", "out_created", "out_price"])
 
-        outlierSmoother = OutlierSmoother(thresh=3.5,
+        outlierSmoother = OutlierSmoother(thresh=4.5,
                                           inputCols=["latitude", "longitude"],
                                           outputCols=["out_latitude", "out_longitude"])
 
+        assemblerForGMM = VectorAssembler(inputCols=["out_latitude", "out_longitude"],
+                                          outputCol="gmmFeatures")
+
+
+        gmm = GaussianMixture(featuresCol="gmmFeatures",
+                              predictionCol="gmmPrediction",
+                              k=5,
+                              probabilityCol="gmmAssignmentProbability",
+                              tol=0.01,
+                              maxIter=100,
+                              seed=None)
+
+        gmmLabelOneHotEncoder = OneHotEncoder(inputCol="gmmPrediction", outputCol="gmmPredictionVector")
 
         assembler = VectorAssembler(inputCols=["out_bathrooms",
                                                "out_bedrooms",
                                                "out_created",
                                                "out_price",
-                                               "out_latitude",
-                                               "out_longitude"],
+                                               "gmmPredictionVector"],
                                     outputCol="features")
 
         self.modelEvaluator = MulticlassClassificationEvaluator(predictionCol="prediction")
@@ -56,7 +70,13 @@ class PipConfig(object):
             self.paramGrid = ParamGridBuilder().addGrid(rf.numTrees, [3,10]).build()
             self.estimator = rf
 
-        self.stages = [imputer, outlierSmoother, assembler, self.estimator]
+        self.stages = [imputer,
+                       outlierSmoother,
+                       assemblerForGMM,
+                       gmm,
+                       gmmLabelOneHotEncoder,
+                       assembler,
+                       self.estimator]
 
     def getStages(self):
         return self.stages

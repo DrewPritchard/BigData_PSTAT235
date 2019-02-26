@@ -134,6 +134,7 @@ if doTest:
     crossvalModel = crossval.fit(train)
     predictions = crossvalModel.transform(test)
     finalOutput = predictions.select(["listing_id","probability"])
+    # predictions.show(10)
     predictions.select(["listing_id","label","probability","prediction"]).show(10, truncate=False)
     evaluator = MulticlassClassificationEvaluator(metricName="accuracy")
 
