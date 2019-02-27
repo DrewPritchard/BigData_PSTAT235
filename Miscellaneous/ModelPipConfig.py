@@ -9,48 +9,83 @@ from pyspark.ml.evaluation import RegressionEvaluator
 
 from pyspark.ml.feature import StandardScaler
 from Miscellaneous.Logger import Logger
+from FeaturesMakers.OutlierSmoother import OutlierSmoother
+from pyspark.ml.clustering import GaussianMixture
+from pyspark.ml.feature import OneHotEncoder
 
 class PipConfig(object):
 
-    def __init__(self):
-        return
-
-    def getStages(self, method="LogisticRegression"):
+    def __init__(self, method=None):
+        self.estimator = None
+        self.paramGrid = None
+        if method is None:
+            self.method = "LogisticRegression"
+        else:
+            self.method = method
+        self.stages = None
 
         imputer = Imputer(strategy="mean",
                           inputCols=["bathrooms", "bedrooms", "created", "price"],
                           outputCols=["out_bathrooms", "out_bedrooms", "out_created", "out_price"])
 
-        assembler = VectorAssembler(inputCols=["out_bathrooms", "out_bedrooms", "out_created", "out_price"],
+        outlierSmoother = OutlierSmoother(thresh=4.5,
+                                          inputCols=["latitude", "longitude"],
+                                          outputCols=["out_latitude", "out_longitude"])
+
+        assemblerForGMM = VectorAssembler(inputCols=["out_latitude", "out_longitude"],
+                                          outputCol="gmmFeatures")
+
+
+        gmm = GaussianMixture(featuresCol="gmmFeatures",
+                              predictionCol="gmmPrediction",
+                              k=5,
+                              probabilityCol="gmmAssignmentProbability",
+                              tol=0.01,
+                              maxIter=100,
+                              seed=None)
+
+        gmmLabelOneHotEncoder = OneHotEncoder(inputCol="gmmPrediction", outputCol="gmmPredictionVector")
+
+        assembler = VectorAssembler(inputCols=["out_bathrooms",
+                                               "out_bedrooms",
+                                               "out_created",
+                                               "out_price",
+                                               "gmmPredictionVector"],
                                     outputCol="features")
 
+        self.modelEvaluator = MulticlassClassificationEvaluator(predictionCol="prediction")
 
-        modelEvaluator = MulticlassClassificationEvaluator()
-
-        estimator = None
-        paramGrid = None
-
-        if method == "LogisticRegression":
+        if self.method == "LogisticRegression":
             Logger.logger.info("Using the logistic regression")
             logisticR = LogisticRegression(maxIter=20, family="multinomial")  # , regParam=0.3, elasticNetParam=0.8)
 
-            paramGrid = ParamGridBuilder().addGrid(logisticR.regParam,
+            self.paramGrid = ParamGridBuilder().addGrid(logisticR.regParam,
                                                    [0.1, 0.01]).addGrid(logisticR.elasticNetParam,
                                                                         [0, 1]).build()
-            estimator = logisticR
+            self.estimator = logisticR
 
-
-        if method == "RandomForest":
+        if self.method == "RandomForest":
             Logger.logger.info("Using the RandomForest")
             rf = RandomForestClassifier()
-            paramGrid = ParamGridBuilder().addGrid(rf.numTrees, [3,10]).build()
-            estimator = rf
+            self.paramGrid = ParamGridBuilder().addGrid(rf.numTrees, [3,10]).build()
+            self.estimator = rf
 
+        self.stages = [imputer,
+                       outlierSmoother,
+                       assemblerForGMM,
+                       gmm,
+                       gmmLabelOneHotEncoder,
+                       assembler,
+                       self.estimator]
 
-        crossval = CrossValidator(estimator=estimator,
-                                  estimatorParamMaps=paramGrid,
-                                  evaluator=modelEvaluator,
-                                  numFolds=5)
-        stages = [imputer, assembler, crossval]
-        return stages
+    def getStages(self):
+        return self.stages
 
+    def getParamGrid(self):
+        return self.paramGrid
+
+    def getEstimator(self):
+        return self.estimator
+
+    def getModelEvaluator(self):
+        return self.modelEvaluator
