@@ -12,6 +12,7 @@ from Miscellaneous.Logger import Logger
 from FeaturesMakers.OutlierSmoother import OutlierSmoother
 from pyspark.ml.clustering import GaussianMixture
 from pyspark.ml.feature import OneHotEncoder
+from ModelEvaluators.MultiClassLogLossEvaluator import MultiClassLogLossEvaluator
 
 class PipConfig(object):
 
@@ -53,7 +54,8 @@ class PipConfig(object):
                                                "gmmPredictionVector"],
                                     outputCol="features")
 
-        self.modelEvaluator = MulticlassClassificationEvaluator(predictionCol="prediction")
+        # self.modelEvaluator = MulticlassClassificationEvaluator(predictionCol="prediction", labelCol="label")
+        self.modelEvaluator = MultiClassLogLossEvaluator(probabilityVectorCol="probability", labelCol="label")
 
         if self.method == "LogisticRegression":
             Logger.logger.info("Using the logistic regression")
