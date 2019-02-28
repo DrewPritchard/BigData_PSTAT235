@@ -1,1 +1,1 @@
-defaultOutputDir = "/tmp/"
+defaultOutputDir = "./"

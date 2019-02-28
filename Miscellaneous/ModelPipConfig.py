@@ -29,9 +29,9 @@ class PipConfig(object):
                           inputCols=["bathrooms", "bedrooms", "created", "price"],
                           outputCols=["out_bathrooms", "out_bedrooms", "out_created", "out_price"])
 
-        outlierSmoother = OutlierSmoother(thresh=4.5,
-                                          inputCols=["latitude", "longitude"],
-                                          outputCols=["out_latitude", "out_longitude"])
+        outlierSmoother = OutlierSmoother(thresh=5.5,
+                                          inputCols=["latitude", "longitude", "out_price"],
+                                          outputCols=["out_latitude", "out_longitude", "out_price2"])
 
         assemblerForGMM = VectorAssembler(inputCols=["out_latitude", "out_longitude"],
                                           outputCol="gmmFeatures")
@@ -39,7 +39,7 @@ class PipConfig(object):
 
         gmm = GaussianMixture(featuresCol="gmmFeatures",
                               predictionCol="gmmPrediction",
-                              k=5,
+                              k=7,
                               probabilityCol="gmmAssignmentProbability",
                               tol=0.01,
                               maxIter=100,
@@ -50,7 +50,7 @@ class PipConfig(object):
         assembler = VectorAssembler(inputCols=["out_bathrooms",
                                                "out_bedrooms",
                                                "out_created",
-                                               "out_price",
+                                               "out_price2",
                                                "gmmPredictionVector"],
                                     outputCol="features")
 
@@ -68,8 +68,8 @@ class PipConfig(object):
 
         if self.method == "RandomForest":
             Logger.logger.info("Using the RandomForest")
-            rf = RandomForestClassifier()
-            self.paramGrid = ParamGridBuilder().addGrid(rf.numTrees, [3,10]).build()
+            rf = RandomForestClassifier(numTrees=10)
+            self.paramGrid = ParamGridBuilder().addGrid(gmm.k, [2, 10]).build()
             self.estimator = rf
 
         self.stages = [imputer,

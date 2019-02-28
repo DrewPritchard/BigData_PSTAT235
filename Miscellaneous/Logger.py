@@ -6,7 +6,7 @@ class Logger(object):
 
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=logging.INFO)
 
-    hdlr = logging.FileHandler(OutputDir.defaultOutputDir + 'hgPrediction.log')
+    hdlr = logging.FileHandler(OutputDir.defaultOutputDir + 'project.log')
     logger = logging.getLogger('hgPredictionModel')
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
     hdlr.setFormatter(formatter)

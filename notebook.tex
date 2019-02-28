@@ -1,0 +1,1231 @@
+
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+
+
+
+    
+\documentclass[11pt]{article}
+
+    
+    
+    \usepackage[T1]{fontenc}
+    % Nicer default font (+ math font) than Computer Modern for most use cases
+    \usepackage{mathpazo}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % We will generate all images so they have a width \maxwidth. This means
+    % that they will get their normal width if they fit onto the page, but
+    % are scaled down if they would overflow the margins.
+    \makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+    \else\Gin@nat@width\fi}
+    \makeatother
+    \let\Oldincludegraphics\includegraphics
+    % Set max figure width to be 80% of text width, for now hardcoded.
+    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionLabelFormat{nolabel}{}
+    \captionsetup{labelformat=nolabel}
+
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    
+
+    
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{Report}
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+    \begin{document}
+    
+    
+    \maketitle
+    
+    
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}1}]:} \PY{k+kn}{from} \PY{n+nn}{pyspark}\PY{n+nn}{.}\PY{n+nn}{sql} \PY{k}{import} \PY{n}{SparkSession}
+        \PY{k+kn}{from} \PY{n+nn}{pyspark} \PY{k}{import} \PY{n}{SparkContext}
+        \PY{k+kn}{from} \PY{n+nn}{pyspark}\PY{n+nn}{.}\PY{n+nn}{sql} \PY{k}{import} \PY{n}{SQLContext}
+        \PY{k+kn}{from} \PY{n+nn}{pyspark}\PY{n+nn}{.}\PY{n+nn}{ml}\PY{n+nn}{.}\PY{n+nn}{linalg} \PY{k}{import} \PY{n}{DenseVector}
+        \PY{k+kn}{import} \PY{n+nn}{pyspark}\PY{n+nn}{.}\PY{n+nn}{sql}\PY{n+nn}{.}\PY{n+nn}{functions} \PY{k}{as} \PY{n+nn}{F}
+        \PY{k+kn}{import} \PY{n+nn}{seaborn} \PY{k}{as} \PY{n+nn}{sns}
+        \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+        \PY{k+kn}{import} \PY{n+nn}{pyspark}\PY{n+nn}{.}\PY{n+nn}{sql}\PY{n+nn}{.}\PY{n+nn}{types} \PY{k}{as} \PY{n+nn}{typ}
+        \PY{k+kn}{from} \PY{n+nn}{pyspark}\PY{n+nn}{.}\PY{n+nn}{ml}\PY{n+nn}{.}\PY{n+nn}{classification} \PY{k}{import} \PY{n}{LogisticRegression}
+        \PY{k+kn}{from} \PY{n+nn}{pyspark}\PY{n+nn}{.}\PY{n+nn}{ml}\PY{n+nn}{.}\PY{n+nn}{evaluation} \PY{k}{import} \PY{n}{MulticlassClassificationEvaluator}
+        \PY{k+kn}{from} \PY{n+nn}{pyspark}\PY{n+nn}{.}\PY{n+nn}{sql}\PY{n+nn}{.}\PY{n+nn}{functions} \PY{k}{import} \PY{n}{isnan}\PY{p}{,} \PY{n}{when}\PY{p}{,} \PY{n}{count}\PY{p}{,} \PY{n}{col}
+        
+        
+        \PY{k+kn}{import} \PY{n+nn}{re}
+        \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+        \PY{k+kn}{from} \PY{n+nn}{pyspark}\PY{n+nn}{.}\PY{n+nn}{sql} \PY{k}{import} \PY{n}{SparkSession}
+        
+        \PY{n}{spark} \PY{o}{=} \PY{n}{SparkSession} \PYZbs{}
+            \PY{o}{.}\PY{n}{builder} \PYZbs{}
+            \PY{o}{.}\PY{n}{master}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{local[*]}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} \PYZbs{}
+            \PY{o}{.}\PY{n}{appName}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Jonas\PYZus{}rentalPrice\PYZhy{}Copy1}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} \PYZbs{}
+            \PY{o}{.}\PY{n}{config}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{spark.executor.memory}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{4g}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PYZbs{}
+            \PY{o}{.}\PY{n}{config}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{spark.executor.cores}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PYZbs{}
+            \PY{o}{.}\PY{n}{config}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{spark.cores.max}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PYZbs{}
+            \PY{o}{.}\PY{n}{config}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{spark.driver.memory}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1g}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PYZbs{}
+            \PY{o}{.}\PY{n}{getOrCreate}\PY{p}{(}\PY{p}{)}
+        
+        \PY{n}{sc} \PY{o}{=} \PY{n}{spark}\PY{o}{.}\PY{n}{sparkContext}
+        \PY{n}{sqlCtx} \PY{o}{=} \PY{n}{SQLContext}\PY{p}{(}\PY{n}{sc}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}2}]:} \PY{n}{data\PYZus{}pd} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}json}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{data/train.json}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \section{Check the validity of the
+data}\label{check-the-validity-of-the-data}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}3}]:} \PY{n+nb}{set}\PY{p}{(}\PY{p}{[}\PY{n}{t}\PY{o}{\PYZgt{}}\PY{o}{=}\PY{l+m+mi}{0} \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bathrooms}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}3}]:} \{True\}
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}4}]:} \PY{n+nb}{set}\PY{p}{(}\PY{p}{[}\PY{n}{t}\PY{o}{\PYZgt{}}\PY{o}{=}\PY{l+m+mi}{0} \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bedrooms}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}4}]:} \{True\}
+\end{Verbatim}
+            
+    So as you can see all houses in newyork have at least 0 bathrooms and
+have at least 0 bedrooms
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}5}]:} \PY{k+kn}{import} \PY{n+nn}{time}
+        \PY{k+kn}{import} \PY{n+nn}{datetime}
+        \PY{n+nb}{set}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{0}\PY{o}{\PYZlt{}}\PY{n}{time}\PY{o}{.}\PY{n}{mktime}\PY{p}{(}\PY{n}{datetime}\PY{o}{.}\PY{n}{datetime}\PY{o}{.}\PY{n}{strptime}\PY{p}{(}\PY{n}{s}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{Y\PYZhy{}}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{m\PYZhy{}}\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s2}{ }\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{H:}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{M:}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{S}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{timetuple}\PY{p}{(}\PY{p}{)}\PY{p}{)} \PY{k}{for} \PY{n}{s} \PY{o+ow}{in} \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{created}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}5}]:} \{True\}
+\end{Verbatim}
+            
+    And all houses in NYC have a posted date
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}6}]:} \PY{n+nb}{set}\PY{p}{(}\PY{p}{[}\PY{n+nb}{len}\PY{p}{(}\PY{n}{t}\PY{o}{.}\PY{n}{strip}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{o}{\PYZgt{}}\PY{l+m+mi}{0} \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{description}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}6}]:} \{False, True\}
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}7}]:} \PY{n+nb}{set}\PY{p}{(}\PY{p}{[}\PY{n+nb}{len}\PY{p}{(}\PY{n}{t}\PY{o}{.}\PY{n}{strip}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{o}{\PYZgt{}}\PY{l+m+mi}{0} \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{display\PYZus{}address}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}7}]:} \{False, True\}
+\end{Verbatim}
+            
+    So we can see there are some houses do not have descriptions and there
+are some houses do not have addresses
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}8}]:} \PY{n+nb}{set}\PY{p}{(}\PY{p}{[}\PY{n+nb}{len}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{o}{\PYZgt{}}\PY{l+m+mi}{0} \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{features}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}8}]:} \{False, True\}
+\end{Verbatim}
+            
+    So there are some features that are empty
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}9}]:} \PY{n+nb}{set}\PY{p}{(}\PY{p}{[}\PY{n}{t}\PY{o}{\PYZgt{}}\PY{l+m+mi}{0} \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{latitude}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}9}]:} \{False, True\}
+\end{Verbatim}
+            
+    We know NYC is about 40N, 74W, so 0 value on latitude is not possible.
+Some observation have their latitudes equals to 0, so they need to be
+imputed
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}10}]:} \PY{n+nb}{set}\PY{p}{(}\PY{p}{[}\PY{n}{t}\PY{o}{\PYZlt{}}\PY{l+m+mi}{0} \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{longitude}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}10}]:} \{False, True\}
+\end{Verbatim}
+            
+    We know NYC is about 40N, 74W, so 0 value on longitude is not possible.
+Some observation have their longitudes equals to 0, so they need to be
+imputed
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}11}]:} \PY{n+nb}{set}\PY{p}{(}\PY{p}{[}\PY{n}{t}\PY{o}{\PYZgt{}}\PY{l+m+mi}{0} \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{price}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}11}]:} \{True\}
+\end{Verbatim}
+            
+    All houses are not free, which is good
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}12}]:} \PY{n+nb}{set}\PY{p}{(}\PY{p}{[}\PY{n+nb}{len}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{o}{\PYZgt{}}\PY{l+m+mi}{0} \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{street\PYZus{}address}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}12}]:} \{False, True\}
+\end{Verbatim}
+            
+    There are some observations that do not have \textbf{street\_address}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}13}]:} \PY{n+nb}{set}\PY{p}{(}\PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{isreal}\PY{p}{(}\PY{n}{t}\PY{p}{)} \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{listing\PYZus{}id}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}13}]:} \{True\}
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}14}]:} \PY{n+nb}{len}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{set}\PY{p}{(}\PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{listing\PYZus{}id}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{o}{==}\PY{n+nb}{len}\PY{p}{(}\PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{listing\PYZus{}id}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}14}]:} True
+\end{Verbatim}
+            
+    Each \textbf{listing\_id} is unique, which is expected
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}15}]:} \PY{n+nb}{set}\PY{p}{(}\PY{p}{[}\PY{n}{t} \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{interest\PYZus{}level}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}15}]:} \{'high', 'low', 'medium'\}
+\end{Verbatim}
+            
+    Each observation must have an \textbf{interest\_level} in (high, low,
+medium)
+
+    \section{EDA}\label{eda}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}16}]:} \PY{n}{interest\PYZus{}level\PYZus{}count} \PY{o}{=} \PY{n+nb}{dict}\PY{p}{(}\PY{p}{)}
+         \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{p}{[}\PY{n}{t} \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{interest\PYZus{}level}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{:}
+             \PY{n}{interest\PYZus{}level\PYZus{}count}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{interest\PYZus{}level\PYZus{}count}\PY{o}{.}\PY{n}{get}\PY{p}{(}\PY{n}{j}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)} \PY{o}{+} \PY{l+m+mi}{1}
+         \PY{n}{interest\PYZus{}level\PYZus{}count}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}16}]:} \{'medium': 11229, 'low': 34284, 'high': 3839\}
+\end{Verbatim}
+            
+    We have counted the number of medium, low, and high. And as you can see,
+The data is a little bit imbalanced but not severe.
+
+    \subsection{bathrooms and bedrooms}\label{bathrooms-and-bedrooms}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}17}]:} \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bathrooms}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}17}]:} <matplotlib.axes.\_subplots.AxesSubplot at 0x7fe2343f2320>
+\end{Verbatim}
+            
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_30_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}18}]:} \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bedrooms}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}18}]:} <matplotlib.axes.\_subplots.AxesSubplot at 0x7fe2344555c0>
+\end{Verbatim}
+            
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_31_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}19}]:} \PY{k+kn}{from} \PY{n+nn}{matplotlib} \PY{k}{import} \PY{n}{pyplot} \PY{k}{as} \PY{n}{plt}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bedrooms}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bathrooms}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}19}]:} [<matplotlib.lines.Line2D at 0x7fe23442cbe0>]
+\end{Verbatim}
+            
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_32_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    From this plot, we can see there is a strange house that has 10
+bathrooms but only 2 bedrooms. That is strange, and we may have a check
+on it
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}20}]:} \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bathrooms}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{==}\PY{l+m+mi}{10}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{description}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}20}]:} '***The building?s well-attended lobby welcomes the residents with its 24-hour doorman and concierge service as well as a fitness center, private storage rooms, bicycle storage, sauna and a laundry area on every floor. Many units have been completely renovated with beautiful new finishes, stone countertops and GE stainless steel appliances. Enjoy the Broadway theater district, Times Square, Central Park and exceptional dining and shopping<br /><br />***HUGE AS BIG AS A FOOT BALL FIELD AND FEATURES HIGH CEILING ,BRAND NEW KITCHEN ,MARBLE BATHROOM, TONS OF CLOSET SPACE ,UNOBSTRUCTED CITY VIEWS AND A TON OF LIGHT DUE TO ITS EXPOSURE AND HIGH FLOOR<br /><br />***TO SET UP TIME AND LOCATION CONTACT RUBENS 039-610-8860<br /><br /><p><a  website\_redacted '
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}21}]:} \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bathrooms}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{==}\PY{l+m+mi}{10}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{photos}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}21}]:} [['https://photos.renthop.com/2/6849204\_1f92b58ab45a9c2119cf5bae708a3864.jpg',
+           'https://photos.renthop.com/2/6849204\_1ae5954a51b5345f0d884a3cccd46ba6.jpg',
+           'https://photos.renthop.com/2/6849204\_0782c1a7feeb02b245be78b737a51b9d.jpg',
+           'https://photos.renthop.com/2/6849204\_1b7803038b0d3af1499aee849085951f.jpg',
+           'https://photos.renthop.com/2/6849204\_60bb31a548ed1d570ccfa79a09e4b19e.jpg']]
+\end{Verbatim}
+            
+    After checking thses images, I am prettysure that 10 bathrooms is an
+entry mistake.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}22}]:} \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{linear\PYZus{}model} \PY{k}{import} \PY{n}{LinearRegression}
+         \PY{k+kn}{import} \PY{n+nn}{scipy}
+         \PY{n}{scipy}\PY{o}{.}\PY{n}{stats}\PY{o}{.}\PY{n}{pearsonr}\PY{p}{(}\PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bathrooms}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bedrooms}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}22}]:} (0.5334463134173691, 0.0)
+\end{Verbatim}
+            
+    The \textbf{bathrooms} and \textbf{bedrooms} are not highly correlated
+
+    So as wee can see most houses in NYC have less than or equal to two
+bathrooms and have less than 3 bedrooms.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}23}]:} \PY{k+kn}{import} \PY{n+nn}{seaborn}
+         \PY{n}{seaborn}\PY{o}{.}\PY{n}{catplot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{interest\PYZus{}level}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bathrooms}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{hue} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bedrooms}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{data} \PY{o}{=} \PY{n}{data\PYZus{}pd}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}23}]:} <seaborn.axisgrid.FacetGrid at 0x7fe2344401d0>
+\end{Verbatim}
+            
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_40_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}24}]:} \PY{n}{seaborn}\PY{o}{.}\PY{n}{catplot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{interest\PYZus{}level}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bedrooms}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{hue} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bathrooms}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{data} \PY{o}{=} \PY{n}{data\PYZus{}pd}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}24}]:} <seaborn.axisgrid.FacetGrid at 0x7fe234753c50>
+\end{Verbatim}
+            
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_41_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    We have observed that if there are more than 5 bathrooms or more than 4
+bathrooms in a house, the \textbf{interest\_level} associated with that
+house can rarely be high
+
+    \subsection{price}\label{price}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}25}]:} \PY{n}{g} \PY{o}{=} \PY{n}{seaborn}\PY{o}{.}\PY{n}{catplot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{interest\PYZus{}level}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{price}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{data} \PY{o}{=} \PY{n}{data\PYZus{}pd}\PY{p}{)}\PY{o}{.}\PY{n}{set}\PY{p}{(}\PY{n}{ylim}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{50000}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_44_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    And we can see the housing rental prices in NYC is very expensive.
+However, if a house's rental price is more than 10000, the interest
+level can rarely be high.
+
+    \subsection{latitude and longitude}\label{latitude-and-longitude}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}26}]:} \PY{n}{seaborn}\PY{o}{.}\PY{n}{scatterplot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{longitude}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                             \PY{n}{y}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{latitude}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                             \PY{n}{hue} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{interest\PYZus{}level}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                             \PY{n}{data} \PY{o}{=} \PY{n}{data\PYZus{}pd}\PY{p}{)}\PY{o}{.}\PY{n}{set}\PY{p}{(}\PY{n}{ylim}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{38}\PY{p}{,} \PY{l+m+mi}{44}\PY{p}{)}\PY{p}{,}\PY{n}{xlim}\PY{o}{=}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{80}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{l+m+mi}{70}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}26}]:} [(38, 44), (-80, -70)]
+\end{Verbatim}
+            
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_47_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Let's zoom in for a little bit
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}27}]:} \PY{n}{seaborn}\PY{o}{.}\PY{n}{scatterplot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{longitude}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                             \PY{n}{y}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{latitude}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                             \PY{n}{hue} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{interest\PYZus{}level}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                             \PY{n}{data} \PY{o}{=} \PY{n}{data\PYZus{}pd}\PY{p}{)}\PY{o}{.}\PY{n}{set}\PY{p}{(}\PY{n}{ylim}\PY{o}{=}\PY{p}{(}\PY{l+m+mf}{40.4}\PY{p}{,} \PY{l+m+mi}{41}\PY{p}{)}\PY{p}{,}\PY{n}{xlim}\PY{o}{=}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mf}{74.25}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{l+m+mf}{73.75}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}27}]:} [(40.4, 41), (-74.25, -73.75)]
+\end{Verbatim}
+            
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_49_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    As we can see, the medium, low, and high are have their own clusters
+each shape as a narrow oval. Therefore, gaussian mixture model may help
+in this case.
+
+    \subsection{created}\label{created}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}28}]:} \PY{n}{createdUnixTime} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{s}\PY{p}{:}\PY{n}{time}\PY{o}{.}\PY{n}{mktime}\PY{p}{(}\PY{n}{datetime}\PY{o}{.}\PY{n}{datetime}\PY{o}{.}\PY{n}{strptime}\PY{p}{(}\PY{n}{s}\PY{p}{,} 
+                                                                  \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{Y\PYZhy{}}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{m\PYZhy{}}\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s2}{ }\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{H:}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{M:}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{S}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{timetuple}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{,} 
+                  \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{created}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}29}]:} \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+         
+         \PY{c+c1}{\PYZsh{} An \PYZdq{}interface\PYZdq{} to matplotlib.axes.Axes.hist() method}
+         \PY{n}{n}\PY{p}{,} \PY{n}{bins}\PY{p}{,} \PY{n}{patches} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{n}{createdUnixTime}\PY{p}{,} 
+                                     \PY{n}{bins}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{,} 
+                                     \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsh{}0504aa}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                                     \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.7}\PY{p}{,} \PY{n}{rwidth}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.75}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Frequency}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{maxfreq} \PY{o}{=} \PY{n}{n}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{} Set a clean upper y\PYZhy{}axis limit.}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{ylim}\PY{p}{(}\PY{n}{ymax}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{ceil}\PY{p}{(}\PY{n}{maxfreq} \PY{o}{/} \PY{l+m+mi}{10}\PY{p}{)} \PY{o}{*} \PY{l+m+mi}{10} \PY{k}{if} \PY{n}{maxfreq} \PY{o}{\PYZpc{}} \PY{l+m+mi}{10} \PY{k}{else} \PY{n}{maxfreq} \PY{o}{+} \PY{l+m+mi}{10}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}29}]:} (0.0, 3550.0)
+\end{Verbatim}
+            
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_53_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}30}]:} \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{createdUnixTime}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{createdUnixTime}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}31}]:} \PY{n}{seaborn}\PY{o}{.}\PY{n}{catplot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{interest\PYZus{}level}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{createdUnixTime}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{data} \PY{o}{=} \PY{n}{data\PYZus{}pd}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}31}]:} <seaborn.axisgrid.FacetGrid at 0x7fe2347b4c50>
+\end{Verbatim}
+            
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_55_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    As you can see the created time for \textbf{high} has some gaps that
+\textbf{medium} and \textbf{low} does not have, so we may be able to
+utilize that after some careful feature engineering.
+
+    \subsection{features}\label{features}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}32}]:} \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+         
+         \PY{c+c1}{\PYZsh{} An \PYZdq{}interface\PYZdq{} to matplotlib.axes.Axes.hist() method}
+         \PY{n}{n}\PY{p}{,} \PY{n}{bins}\PY{p}{,} \PY{n}{patches} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{p}{[}\PY{n+nb}{len}\PY{p}{(}\PY{n}{t}\PY{p}{)} \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{features}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{,} 
+                                     \PY{n}{bins}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{,} 
+                                     \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsh{}0504aa}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                                     \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.7}\PY{p}{,} \PY{n}{rwidth}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.75}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Frequency}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{maxfreq} \PY{o}{=} \PY{n}{n}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{} Set a clean upper y\PYZhy{}axis limit.}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{ylim}\PY{p}{(}\PY{n}{ymax}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{ceil}\PY{p}{(}\PY{n}{maxfreq} \PY{o}{/} \PY{l+m+mi}{10}\PY{p}{)} \PY{o}{*} \PY{l+m+mi}{10} \PY{k}{if} \PY{n}{maxfreq} \PY{o}{\PYZpc{}} \PY{l+m+mi}{10} \PY{k}{else} \PY{n}{maxfreq} \PY{o}{+} \PY{l+m+mi}{10}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}32}]:} (0.0, 11150.0)
+\end{Verbatim}
+            
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_58_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    And most rows in the \textbf{features} column have less than 10 items
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}33}]:} \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{features\PYZus{}len}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n+nb}{len}\PY{p}{,} \PY{n}{data\PYZus{}pd}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{features}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}34}]:} \PY{n}{seaborn}\PY{o}{.}\PY{n}{catplot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{interest\PYZus{}level}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                             \PY{n}{y}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{features\PYZus{}len}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                             \PY{n}{data} \PY{o}{=} \PY{n}{data\PYZus{}pd}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}34}]:} <seaborn.axisgrid.FacetGrid at 0x7fe23481c4e0>
+\end{Verbatim}
+            
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_61_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    And seems like the length of the \textbf{features} does not help...
+
+    \section{Feature Engineering}\label{feature-engineering}
+
+    \subsection{created}\label{created}
+
+    For both model tesing the prediction, the \textbf{created} is converted
+to the unix time, so that becomes a real number suitable for various of
+models.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}35}]:} \PY{o}{!} cat projectModelRunner.py \PY{p}{|} grep \PY{l+s+s2}{\PYZdq{}mktime\PYZdq{}}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+    input\_data\_pd["created"] = input\_data\_pd["created"].apply(lambda s: time.mktime(datetime.datetime.strptime(s, "\%Y-\%m-\%d \%H:\%M:\%S").timetuple()))
+    input\_data\_pd\_train["created"] = input\_data\_pd\_train["created"].apply(lambda s: time.mktime(datetime.datetime.strptime(s, "\%Y-\%m-\%d \%H:\%M:\%S").timetuple()))
+    input\_data\_pd\_test["created"] = input\_data\_pd\_test["created"].apply(lambda s: time.mktime(datetime.datetime.strptime(s, "\%Y-\%m-\%d \%H:\%M:\%S").timetuple()))
+
+    \end{Verbatim}
+
+    \subsection{latitude and longitude}\label{latitude-and-longitude}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}36}]:} \PY{o}{!} head \PYZhy{}49 Miscellaneous/ModelPipConfig.py \PY{p}{|} tail \PYZhy{}15
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+        assemblerForGMM = VectorAssembler(inputCols=["out\_latitude", "out\_longitude"],
+                                          outputCol="gmmFeatures")
+
+
+        gmm = GaussianMixture(featuresCol="gmmFeatures",
+                              predictionCol="gmmPrediction",
+                              k=7,
+                              probabilityCol="gmmAssignmentProbability",
+                              tol=0.01,
+                              maxIter=100,
+                              seed=None)
+
+        gmmLabelOneHotEncoder = OneHotEncoder(inputCol="gmmPrediction", outputCol="gmmPredictionVector")
+
+
+    \end{Verbatim}
+
+    Because we assume that houses' 2D locations with different interest
+level are distributed in NYC by different Gaussian mixtures. Points are
+clustered and one hot encoded and then fitted into the model
+
+    \subsection{Extreme Value Imputation}\label{extreme-value-imputation}
+
+    I believe that observations with a modified z-score (based on the median
+absolute deviation) greater than 5.5 are extreme outliers and are
+entered mistakenly. I wrote the following code for cleaning those
+outliers.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}37}]:} \PY{o}{!} cat FeaturesMakers/OutlierSmoother.py
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+from pyspark.ml.util import JavaMLReadable, JavaMLWritable
+from pyspark.ml.wrapper import JavaEstimator, JavaModel, JavaParams, JavaTransformer, \_jvm
+from pyspark.ml.common import inherit\_doc
+from pyspark import since, keyword\_only, SparkContext
+from pyspark.sql import DataFrame
+
+from pyspark.ml.param.shared import *
+from pyspark.ml import Pipeline, Transformer
+from typing import Iterable,List
+import numpy as np
+from pyspark.sql import Row
+from pyspark.sql.functions import udf
+from pyspark.sql.functions import when, lit, col
+from pyspark.sql.functions import monotonically\_increasing\_id
+from pyspark.sql.types import FloatType
+from Miscellaneous.Logger import Logger
+
+class OutlierSmoother(Transformer):
+    def \_\_init\_\_(self, thresh: float, inputCols: List[str]=None, outputCols: List[str]=None):
+        if len(inputCols) != len(outputCols):
+            raise ValueError("the length of input cols must be equal to the length of output cols")
+        super(OutlierSmoother, self).\_\_init\_\_()
+        self.inputCols = inputCols
+        self.outputCols = outputCols
+        self.thresh = thresh
+
+    @staticmethod
+    def is\_outlier(points, thresh=3.5):
+        """
+        Returns a boolean array with True if points are outliers and False
+        otherwise.
+
+        Parameters:
+        -----------
+            points : An numobservations by numdimensions array of observations
+            thresh : The modified z-score to use as a threshold. Observations with
+                a modified z-score (based on the median absolute deviation) greater
+                than this value will be classified as outliers.
+
+        Returns:
+        --------
+            mask : A numobservations-length boolean array.
+
+        References:
+        ----------
+            Boris Iglewicz and David Hoaglin (1993), "Volume 16: How to Detect and
+            Handle Outliers", The ASQC Basic References in Quality Control:
+            Statistical Techniques, Edward F. Mykytka, Ph.D., Editor.
+        """
+        if len(points.shape) == 1:
+            points = points[:, None]
+        median = np.median(points, axis=0)
+        diff = np.sum((points - median) ** 2, axis=-1)
+        diff = np.sqrt(diff)
+        med\_abs\_deviation = np.median(diff)
+
+        modified\_z\_score = 0.6745 * diff / med\_abs\_deviation
+
+        return modified\_z\_score > thresh
+
+    @staticmethod
+    def replaceToNull(column, value):
+        return when(column != value, column).otherwise(lit(None))
+
+    def \_transform(self, df: DataFrame) -> DataFrame:
+        tmpColList = None
+        tmpColListNpArrFinal = None
+        sc = SparkContext.getOrCreate()
+        new\_df = None
+        outlierSmotherRowIdColName = "outlierSmotherRowId"
+        if outlierSmotherRowIdColName not in df.schema.names:
+            df = df.withColumn(outlierSmotherRowIdColName, monotonically\_increasing\_id())
+        else:
+            outlierSmotherRowIdColName = "outlierSmotherRowId4" + "\_".join(df.schema.names)
+
+        for j in range(len(self.inputCols)):
+            tmpColList = df.select([self.inputCols[j]]).rdd.map(lambda r: r[0]).collect()
+            tmpColListNpArr = np.array(tmpColList)
+            outliersQList = self.is\_outlier(tmpColListNpArr, self.thresh)
+
+            Logger.logger.info(str(sum(outliersQList)) + " outliers in column \textbackslash{}'" + self.inputCols[j] + "\textbackslash{}' has been smoothened")
+
+            outlierIndices = np.where(outliersQList)[0]
+            notOutliersQList = np.array([not j for j in outliersQList])
+
+
+            tmpColListAvg = sum(tmpColListNpArr*notOutliersQList)/sum(notOutliersQList)
+
+            for outlierIndex in outlierIndices:
+                tmpColListNpArr[outlierIndex] = tmpColListAvg
+
+            tmpColListNpArrFinal = tmpColListNpArr.tolist()
+            tmpColListNpArrDict = dict()
+
+            for arrItem in range(len(tmpColListNpArrFinal)):
+                tmpColListNpArrDict[arrItem] = tmpColListNpArrFinal[arrItem]
+
+            def valueToCategory(value):
+                return tmpColListNpArrDict.get(value)
+
+            udfValueToCategory = udf(valueToCategory, FloatType())
+            df = df.withColumn(self.outputCols[j], udfValueToCategory(outlierSmotherRowIdColName))
+
+        df = df.drop(outlierSmotherRowIdColName)
+        return df
+
+
+    \end{Verbatim}
+
+    Basically, the above code will set each of the extreme outliers' values
+to the average of the remaining data.
+
+    \section{Model Selection, Parameter Tunning, and Cross
+Validation}\label{model-selection-parameter-tunning-and-cross-validation}
+
+    The model selected in this case is Random Forest. Because there are some
+"cutting points" in the plots, a tree model might help. More trees will
+increase the robustness of the prediction, and here we use 10 trees.
+
+    Since we have clusterd the \textbf{latitude} and \textbf{longitude} with
+GMM, the number of clusters are unknown, so we need to tune that also.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}38}]:} \PY{o}{!} head \PYZhy{}73 Miscellaneous/ModelPipConfig.py \PY{p}{|} tail \PYZhy{}5
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+        if self.method == "RandomForest":
+            Logger.logger.info("Using the RandomForest")
+            rf = RandomForestClassifier(numTrees=10)
+            self.paramGrid = ParamGridBuilder().addGrid(gmm.k, [2, 10]).build()
+            self.estimator = rf
+
+    \end{Verbatim}
+
+    So we tune the number of clusters from 3 to 10
+
+    The cross validation is used to tune the parameters. In this case, we
+are using the logloss which is defined as follows:
+
+\[
+log loss = -\frac{1}{N}\sum_{i=1}^N\sum_{j=1}^My_{ij}\log(p_{ij}),
+\]
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}39}]:} \PY{o}{!} cat ModelEvaluators/MultiClassLogLossEvaluator.py
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+from pyspark.ml.evaluation import Evaluator
+import numpy as np
+from Miscellaneous.Logger import Logger
+class MultiClassLogLossEvaluator(Evaluator):
+    def \_\_init\_\_(self, probabilityVectorCol="probability", labelCol="label"):
+        self.probabilityVectorCol = probabilityVectorCol
+        self.labelCol = labelCol
+
+    @staticmethod
+    def computeLogLoss(labels, probVecs):
+        if len(labels) != len(probVecs):
+            raise ValueError("the length of the labels must be equal to the length of the probVecs")
+        if min(labels) < 0 or max(labels) > len(probVecs):
+            raise ValueError("Please ensure the labels are 0 based")
+        N = len(labels)
+        M = len(probVecs[0])
+        result = 0.0
+        for i in range(N):
+            for j in range(M):
+                currVec = probVecs[i]
+                result = result + (int(labels[i]) == int(j))*np.log(currVec[j])
+        return -1*result/(N*1.0)
+
+    def evaluate(self, dataset):
+        normalize = lambda vec: vec / (vec).sum()
+        probVecs = [normalize(np.vectorize(lambda p: max(min(p, 1 - 10 ** (-7)), 10 ** (-7)))((row[self.probabilityVectorCol]).toArray())) for row in dataset.collect()]
+        labels = [int(row[self.labelCol]) for row in dataset.collect()]
+        result = MultiClassLogLossEvaluator.computeLogLoss(labels, probVecs)
+        Logger.logger.info("the logloss is: " + str(result))
+        return result
+
+    def isLargerBetter(self):
+        return False
+
+    \end{Verbatim}
+
+    This metric is better when it is smaller. And the above evaluator is
+passed in the cross validator
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}40}]:} \PY{o}{!} head \PYZhy{}58 Miscellaneous/ModelPipConfig.py \PY{p}{|} tail \PYZhy{}1
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+        self.modelEvaluator = MultiClassLogLossEvaluator(probabilityVectorCol="probability", labelCol="label")
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}41}]:} \PY{o}{!} head \PYZhy{}133 projectModelRunner.py \PY{p}{|} tail \PYZhy{}5
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+    crossval = CrossValidator(estimator=Pipeline(stages=pipelineConfig.getStages()),
+                              estimatorParamMaps=pipelineConfig.getParamGrid(),
+                              evaluator=pipelineConfig.getModelEvaluator(),
+                              numFolds=5)
+
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}42}]:} \PY{o}{!} tail project.log
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+2019-02-28 13:03:02,725 INFO 61 outliers in column 'longitude' has been smoothened
+2019-02-28 13:03:03,729 INFO 210 outliers in column 'out\_price' has been smoothened
+2019-02-28 13:03:08,105 INFO Test Error = 0.298738
+2019-02-28 13:03:10,345 INFO Log Loss = 0.74259
+2019-02-28 13:03:11,482 INFO Here is the confusion matrix with both row and column indices as: high, medium, low
+2019-02-28 13:03:11,482 INFO [[  77   11  687]
+ [  45   12 2178]
+ [  31    7 6857]]
+2019-02-28 13:03:11,496 INFO Printing the feature importances
+2019-02-28 13:03:11,497 INFO (5,[0,1,2,3,4],[0.055426949408782324,0.08326990122888284,0.012327367623213657,0.7837445809893646,0.06523120074975657])
+
+    \end{Verbatim}
+
+    Here is the confusion matrix based on the default threshold. The last
+line of this file gives a variable importance measure for each variable
+used in the random forest stage of the pipeline
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}43}]:} \PY{o}{!} head \PYZhy{}56 Miscellaneous/ModelPipConfig.py \PY{p}{|} tail \PYZhy{}8
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+        assembler = VectorAssembler(inputCols=["out\_bathrooms",
+                                               "out\_bedrooms",
+                                               "out\_created",
+                                               "out\_price2",
+                                               "gmmPredictionVector"],
+                                    outputCol="features")
+
+
+    \end{Verbatim}
+
+    Here is the order of the variables that we fitted into the random forest
+classifier. And as you can see, price is the most important variable
+follows by number of bathrooms and number of bedrooms. The optimal
+number of the GMM mixtures after the tunning is 2. Time created and GMM
+clusters are important, even more important than the number of
+bathrooms.
+
+    \section{The business goal}\label{the-business-goal}
+
+    The business goal for this project is to predict the interest level of
+each listing of houses in NYC given their listing information. And we
+have generated estimated probabilities of each listing for different use
+cases.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}44}]:} \PY{n}{probabilities} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n+nb}{eval}\PY{p}{,}\PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{predictionOutput.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{probability}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{probabilities}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}44}]:} array([[0.0581492 , 0.22273207, 0.71911873],
+                [0.04682822, 0.19841723, 0.75475455],
+                [0.09096233, 0.26590303, 0.64313464],
+                {\ldots},
+                [0.03016406, 0.14294173, 0.82689421],
+                [0.03016406, 0.14294173, 0.82689421],
+                [0.0303191 , 0.14431689, 0.82536401]])
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}45}]:} \PY{n}{labels} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{predictionOutput.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{label}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}46}]:} \PY{k}{def} \PY{n+nf}{getPredictionLabel}\PY{p}{(}\PY{n}{probabilities}\PY{p}{,} \PY{n}{weight}\PY{p}{)}\PY{p}{:}
+             \PY{c+c1}{\PYZsh{}make sure the summation of thresh is 1}
+             \PY{c+c1}{\PYZsh{}ALSO make sure the indicies correspond with labels}
+             \PY{n}{output} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+             \PY{k}{for} \PY{n}{currProbVec} \PY{o+ow}{in} \PY{n}{probabilities}\PY{p}{:}
+                 \PY{n}{output}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{argmax}\PY{p}{(} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{currProbVec}\PY{p}{)}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{weight}\PY{p}{)} \PY{p}{)}\PY{p}{)}
+             \PY{k}{return} \PY{n}{output}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}47}]:} \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{metrics} \PY{k}{import} \PY{n}{confusion\PYZus{}matrix}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}48}]:} \PY{n}{confusion\PYZus{}matrix}\PY{p}{(}\PY{n}{labels}\PY{p}{,}\PY{n}{getPredictionLabel}\PY{p}{(}\PY{n}{probabilities}\PY{p}{,} \PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}48}]:} array([[  77,   11,  687],
+                [  45,   12, 2178],
+                [  31,    7, 6857]])
+\end{Verbatim}
+            
+    The above confusion matrix is generated by using the default threshold.
+We have obtained 77/(77+45+31) percition and 77/(77+11+687) recall.
+Which is quite good actually.
+
+    To increase the recall, we can add more weight to the first label
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}49}]:} \PY{n}{confusion\PYZus{}matrix}\PY{p}{(}\PY{n}{labels}\PY{p}{,}\PY{n}{getPredictionLabel}\PY{p}{(}\PY{n}{probabilities}\PY{p}{,} \PY{p}{[}\PY{l+m+mi}{4}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}49}]:} array([[ 252,    0,  523],
+                [ 295,    0, 1940],
+                [ 346,    0, 6549]])
+\end{Verbatim}
+            
+    Now the recall increased to about 50 percent, and precision is
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}52}]:} \PY{l+m+mi}{252}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{252}\PY{o}{+}\PY{l+m+mi}{295}\PY{o}{+}\PY{l+m+mi}{346}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}52}]:} 0.2821948488241881
+\end{Verbatim}
+            
+    Which is still not bad... And actually 28 percent precision is far above
+the threshold for generating leads for a shortening a sales cycle.
+
+    If we want to increase the precision, we can do:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}51}]:} \PY{n}{confusion\PYZus{}matrix}\PY{p}{(}\PY{n}{labels}\PY{p}{,}\PY{n}{getPredictionLabel}\PY{p}{(}\PY{n}{probabilities}\PY{p}{,} \PY{p}{[}\PY{l+m+mf}{0.5}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}51}]:} array([[  12,   59,  704],
+                [   5,   42, 2188],
+                [   2,   27, 6866]])
+\end{Verbatim}
+            
+    \subsection{further improvements
+proposal}\label{further-improvements-proposal}
+
+    \begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  We have fitted the time variable in the random forest as the unix
+  time. In the random forest setting, that time will be cutted by the
+  mean in between each two observations at each step chosen by the
+  lowest Gini value. However, by this method the time variable is not
+  important in this model. We may fit time as categories such as Months
+  of a year, and that may improve the model performance.
+\item
+  We have not mined the \textbf{description} which I think will be
+  important. We may directly use the clustering of the texts and put the
+  method in the pipeline just like the GMM. However, I think a better
+  approach for the \textbf{description} would be to first use a model
+  (such as LSTM) to fit a small portion of the data, save that result
+  externally, one-hot encodes that result , and put that into the design
+  matrix of our pipele.
+\end{enumerate}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+    \end{document}

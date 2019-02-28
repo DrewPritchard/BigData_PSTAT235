@@ -5,7 +5,11 @@
 /venv/*
 /.idea/
 /.idea/*
+*.png
+*.log
+predictionOutput.csv
 *.ipynb
+!Report.ipynb
 !rentalPrice_jonas.ipynb
 **/__pycache__
 __pycache__

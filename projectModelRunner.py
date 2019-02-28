@@ -136,6 +136,8 @@ if doTest:
     finalOutput = predictions.select(["listing_id","probability"])
     # predictions.show(10)
     predictions.select(["listing_id","label","probability","prediction"]).show(10, truncate=False)
+
+
     evaluator = MulticlassClassificationEvaluator(metricName="accuracy")
 
     accuracy = evaluator.evaluate(predictions)
@@ -156,7 +158,12 @@ if doTest:
     cnf_matrix = confusion_matrix(test_confusion_matrix_pd["label"], test_confusion_matrix_pd["prediction"])
     Logger.logger.info("Here is the confusion matrix with both row and column indices as: high, medium, low")
     Logger.logger.info(cnf_matrix)
+    varImp = crossvalModel.bestModel.stages[-1].featureImportances
+    Logger.logger.info("Printing the feature importances")
+    Logger.logger.info(varImp)
 
+    predictionsPandas = predictions.select(["listing_id","label","probability","prediction"]).toPandas()
+    predictionsPandas.to_csv("predictionOutput.csv")
 else:
     Logger.logger.info("Doing the real prediction")
     input_data_pd_train = pd.read_json("data/train.json")
