@@ -13,6 +13,7 @@ from FeaturesMakers.OutlierSmoother import OutlierSmoother
 from pyspark.ml.clustering import GaussianMixture
 from pyspark.ml.feature import OneHotEncoder
 from ModelEvaluators.MultiClassLogLossEvaluator import MultiClassLogLossEvaluator
+from FeaturesMakers.TextFeaturesKMeansCluster import TextFeaturesKMeansCluster
 
 class PipConfig(object):
 
@@ -47,11 +48,20 @@ class PipConfig(object):
 
         gmmLabelOneHotEncoder = OneHotEncoder(inputCol="gmmPrediction", outputCol="gmmPredictionVector")
 
+
+        txtKmeas = TextFeaturesKMeansCluster(k=5, inputCol="featuresList", outputCol="out_features_clusters")
+
+        txtKmeasOneHotEncoder = OneHotEncoder(inputCol="out_features_clusters", outputCol="out_features_clusters_vec")
+
+
+
+
         assembler = VectorAssembler(inputCols=["out_bathrooms",
                                                "out_bedrooms",
                                                "out_created",
                                                "out_price2",
-                                               "gmmPredictionVector"],
+                                               "gmmPredictionVector",
+                                               "out_features_clusters_vec"],
                                     outputCol="features")
 
         # self.modelEvaluator = MulticlassClassificationEvaluator(predictionCol="prediction", labelCol="label")
@@ -77,6 +87,8 @@ class PipConfig(object):
                        assemblerForGMM,
                        gmm,
                        gmmLabelOneHotEncoder,
+                       txtKmeas,
+                       txtKmeasOneHotEncoder,
                        assembler,
                        self.estimator]
 
