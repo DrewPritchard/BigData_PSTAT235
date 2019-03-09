@@ -14,6 +14,7 @@ from pyspark.ml.clustering import GaussianMixture
 from pyspark.ml.feature import OneHotEncoder
 from ModelEvaluators.MultiClassLogLossEvaluator import MultiClassLogLossEvaluator
 from FeaturesMakers.TextFeaturesKMeansCluster import TextFeaturesKMeansCluster
+from FeaturesMakers.DescriptionWorks import DescriptionWorks
 
 class PipConfig(object):
 
@@ -51,17 +52,18 @@ class PipConfig(object):
 
         txtKmeas = TextFeaturesKMeansCluster(k=5, inputCol="featuresList", outputCol="out_features_clusters")
 
-        txtKmeasOneHotEncoder = OneHotEncoder(inputCol="out_features_clusters", outputCol="out_features_clusters_vec")
+#        txtKmeasOneHotEncoder = OneHotEncoder(inputCol="out_features_clusters", outputCol="out_features_clusters_vec")
 
 
-
+        desWork = DescriptionWorks(k=1000, inputCol="description", outputCol="out_description")
 
         assembler = VectorAssembler(inputCols=["out_bathrooms",
                                                "out_bedrooms",
                                                "out_created",
                                                "out_price2",
                                                "gmmPredictionVector",
-                                               "out_features_clusters_vec"],
+                                               "out_features_clusters",
+                                               "out_description"],
                                     outputCol="features")
 
         # self.modelEvaluator = MulticlassClassificationEvaluator(predictionCol="prediction", labelCol="label")
@@ -79,7 +81,7 @@ class PipConfig(object):
         if self.method == "RandomForest":
             Logger.logger.info("Using the RandomForest")
             rf = RandomForestClassifier(numTrees=10)
-            self.paramGrid = ParamGridBuilder().addGrid(gmm.k, [2, 10]).build()
+            self.paramGrid = ParamGridBuilder().addGrid(gmm.k, [2, 5]).build()
             self.estimator = rf
 
         self.stages = [imputer,
@@ -87,8 +89,9 @@ class PipConfig(object):
                        assemblerForGMM,
                        gmm,
                        gmmLabelOneHotEncoder,
+                       desWork,
                        txtKmeas,
-                       txtKmeasOneHotEncoder,
+                       # txtKmeasOneHotEncoder,
                        assembler,
                        self.estimator]
 
