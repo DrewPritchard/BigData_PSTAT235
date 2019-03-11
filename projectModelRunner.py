@@ -71,10 +71,10 @@ spark = SparkSession \
     .builder \
     .master("local") \
     .appName("pstat235final") \
-    .config("spark.executor.memory", '4g') \
+    .config("spark.executor.memory", '12g') \
     .config('spark.executor.cores', '1') \
     .config('spark.cores.max', '1') \
-    .config("spark.driver.memory",'1g') \
+    .config("spark.driver.memory",'3g') \
     .getOrCreate()
 
 sc = SparkContext.getOrCreate()
@@ -158,12 +158,20 @@ if doTest:
     cnf_matrix = confusion_matrix(test_confusion_matrix_pd["label"], test_confusion_matrix_pd["prediction"])
     Logger.logger.info("Here is the confusion matrix with both row and column indices as: high, medium, low")
     Logger.logger.info(cnf_matrix)
-    varImp = crossvalModel.bestModel.stages[-1].featureImportances
-    Logger.logger.info("Printing the feature importances")
-    Logger.logger.info(varImp)
 
     predictionsPandas = predictions.select(["listing_id","label","probability","prediction"]).toPandas()
     predictionsPandas.to_csv("predictionOutput.csv")
+
+    if finalClassifier == "LogisticRegression":
+        varImp = crossvalModel.bestModel.stages[-1]
+    else:
+        varImp = crossvalModel.bestModel.stages[-1].featureImportances
+
+    Logger.logger.info("Printing the feature importances")
+
+    Logger.logger.info(varImp)
+
+
 else:
     Logger.logger.info("Doing the real prediction")
     input_data_pd_train = pd.read_json("data/train.json")

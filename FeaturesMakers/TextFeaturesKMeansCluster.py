@@ -21,6 +21,7 @@ from pyspark.ml.pipeline import Pipeline
 from pyspark.ml.clustering import BisectingKMeans
 import pyspark.sql.types as typ
 import pyspark.sql.functions as F
+from pyspark.ml.feature import VectorAssembler
 
 
 class TextFeaturesKMeansCluster(Transformer):
@@ -31,6 +32,7 @@ class TextFeaturesKMeansCluster(Transformer):
         self.k = int(k)
 
     def _transform(self, df):
+
         inputCol = self.inputCol
         #creates 1 sting of the features
         string_assembler = F.UserDefinedFunction(lambda x: ','.join(x), typ.StringType())
@@ -42,12 +44,13 @@ class TextFeaturesKMeansCluster(Transformer):
                                  F.when(df[inputCol] == '', 'missing features')
                                  .otherwise(df[inputCol]))
         #split df on "," and "*" stores as new data frame
-        df = df.withColumn("features_list", F.split(df[inputCol], ',| \* '))
+        feat_df = df.withColumn("features_list", F.split(df[inputCol], ',| \* '))
         #explodes the features into column "ex_features_list"
-        df = df.withColumn("ex_features_list", F.explode(df["features_list"]))
+        feat_df_ex = feat_df.withColumn("ex_features_list", F.explode(feat_df["features_list"]))
         #creates clustering data frame with only column "ex_features_list"
+        clustering_df = feat_df_ex[["ex_features_list"]]
         #renames the column
-        df = df.withColumnRenamed("ex_features_list", "text")
+        clustering_df = clustering_df.withColumnRenamed("ex_features_list", "text")
 
         #creates a tokenizer
         tokenizer = Tokenizer(inputCol="text", outputCol="tokens")
@@ -56,21 +59,48 @@ class TextFeaturesKMeansCluster(Transformer):
         #hashes the features into sparse vectors
         hashingTF = HashingTF(inputCol="stopWordsRemovedTokens", outputCol="rawFeatures", numFeatures=2000)
         #invers document frequency - importance of the work (kind of)
-        idf = IDF(inputCol="rawFeatures", outputCol="out_features", minDocFreq=5)
+        idf = IDF(inputCol="rawFeatures", outputCol="features", minDocFreq=5)
 
         #creates and fits the pipeline
         pipeline = Pipeline(stages=[tokenizer, remover, hashingTF, idf])
-        df = pipeline.fit(df).transform(df)
+        pipelined_df = pipeline.fit(clustering_df).transform(clustering_df)
 
         #Set the number of clusters determined in rentalPrice_jonas.ipynb
-        num_k = self.k
+        num_k = 18
         #creates the k-means
-        km = BisectingKMeans(k = num_k,featuresCol = "out_features")
+        km = BisectingKMeans(k = num_k)
         #fits it to the pipelined data frame
-        model = km.fit(df)
+        model = km.fit(pipelined_df)
         #transform into the results
-        results = model.transform(df)
+        results = model.transform(pipelined_df)
         #changes the name of the column "prediction" to "cluster"
-        results = results.withColumnRenamed("prediction", self.outputCol)
+        results = results.withColumnRenamed("prediction", "clusters")
 
-        return results
+        join_df = results.drop(*["tokens", "stopWordsRemovedTokens", "rawFeatures", "features"])
+        #creates a column to add on\n",
+        join_df = join_df.withColumn("join_col", F.monotonically_increasing_id())
+        feat_df_ex = feat_df_ex.withColumn("join_col", F.monotonically_increasing_id())
+        #joins the df_together\n",
+        joined_df = feat_df_ex.join(join_df, feat_df_ex["join_col"] == join_df["join_col"], how = "left")
+        joined_df = joined_df.drop("join_col")
+        #have to ad constatnt column for the pivot function
+        joined_df = joined_df.withColumn("constant_val", F.lit(1))
+        #pivots the data frame
+        df_piv = joined_df\
+                       .groupBy("listing_id")\
+                       .pivot("clusters")\
+                       .agg(F.coalesce(F.first("constant_val")))
+        #Joins the data frame to the original\n",
+        df = df.join(df_piv, on = "listing_id", how = "left")
+        #store the colusters in list, removes "listing_id"
+        cluster_col = df_piv.columns
+        cluster_col.remove("listing_id")
+        #fills missing values",
+        df = df.fillna(0, subset = cluster_col)
+        #changes the names of the columns to "#_feature_cluster" to the stings",
+
+        va = VectorAssembler(inputCols=[x for x in cluster_col], outputCol=self.outputCol)
+        df = va.transform(df)
+        for c in cluster_col:
+            df = df.drop(c)
+        return df
