@@ -32,8 +32,8 @@ class PipConfig(object):
                           outputCols=["out_bathrooms", "out_bedrooms", "out_created", "out_price"])
 
         outlierSmoother = OutlierSmoother(thresh=5.5,
-                                          inputCols=["latitude", "longitude", "out_price"],
-                                          outputCols=["out_latitude", "out_longitude", "out_price2"])
+                                          inputCols=["latitude", "longitude"],
+                                          outputCols=["out_latitude", "out_longitude"])
 
         assemblerForGMM = VectorAssembler(inputCols=["out_latitude", "out_longitude"],
                                           outputCol="gmmFeatures")
@@ -50,20 +50,20 @@ class PipConfig(object):
         gmmLabelOneHotEncoder = OneHotEncoder(inputCol="gmmPrediction", outputCol="gmmPredictionVector")
 
 
-        txtKmeas = TextFeaturesKMeansCluster(k=5, inputCol="featuresList", outputCol="out_features_clusters")
-
-#        txtKmeasOneHotEncoder = OneHotEncoder(inputCol="out_features_clusters", outputCol="out_features_clusters_vec")
+        # txtKmeas = TextFeaturesKMeansCluster(k=5, inputCol="featuresList", outputCol="out_features_clusters")
 
 
-        desWork = DescriptionWorks(k=1000, inputCol="description", outputCol="out_description")
+
+        # desWork = DescriptionWorks(k=1000, inputCol="description", outputCol="out_description")
 
         assembler = VectorAssembler(inputCols=["out_bathrooms",
                                                "out_bedrooms",
                                                "out_created",
-                                               "out_price2",
+                                               "out_price",
                                                "gmmPredictionVector",
-                                               "out_features_clusters",
-                                               "out_description"],
+                                               # "out_features_clusters",
+                                               # "out_description"
+                                               ],
                                     outputCol="features")
 
         # self.modelEvaluator = MulticlassClassificationEvaluator(predictionCol="prediction", labelCol="label")
@@ -74,14 +74,14 @@ class PipConfig(object):
             logisticR = LogisticRegression(maxIter=20, family="multinomial")  # , regParam=0.3, elasticNetParam=0.8)
 
             self.paramGrid = ParamGridBuilder().addGrid(logisticR.regParam,
-                                                   [0.1, 0.01]).addGrid(logisticR.elasticNetParam,
-                                                                        [0, 1]).build()
+                                                   [0.3, 0.1, 0.01]).addGrid(logisticR.elasticNetParam,
+                                                                        [0, 0.3, 1]).build()
             self.estimator = logisticR
 
         if self.method == "RandomForest":
             Logger.logger.info("Using the RandomForest")
             rf = RandomForestClassifier(numTrees=10)
-            self.paramGrid = ParamGridBuilder().addGrid(gmm.k, [2, 5]).build()
+            self.paramGrid = ParamGridBuilder().addGrid(gmm.k, [2, 5]).addGrid(rf.maxDepth, [2,4,10]).build()
             self.estimator = rf
 
         self.stages = [imputer,
@@ -89,9 +89,8 @@ class PipConfig(object):
                        assemblerForGMM,
                        gmm,
                        gmmLabelOneHotEncoder,
-                       desWork,
-                       txtKmeas,
-                       # txtKmeasOneHotEncoder,
+                       # desWork,
+                       # txtKmeas,
                        assembler,
                        self.estimator]
 

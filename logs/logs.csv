@@ -1,0 +1,151 @@
+(venv) ➜  pstat235_xiningli git:(master) python3 projectModelRunner.py finalClassifier:RandomForest doTest:true
+[2019-03-09 14:56:35,281] {'finalClassifier': 'RandomForest', 'doTest': True}
+2019-03-09 14:56:37 WARN  Utils:66 - Your hostname, xiningli-XPS-13-9360 resolves to a loopback address: 127.0.1.1; using 192.168.0.11 instead (on interface wlp58s0)
+2019-03-09 14:56:37 WARN  Utils:66 - Set SPARK_LOCAL_IP if you need to bind to another address
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by org.apache.hadoop.security.authentication.util.KerberosUtil (file:/home/xiningli/repos/pstat235_xiningli/venv/lib/python3.6/site-packages/pyspark/jars/hadoop-auth-2.7.3.jar) to method sun.security.krb5.Config.getInstance()
+WARNING: Please consider reporting this to the maintainers of org.apache.hadoop.security.authentication.util.KerberosUtil
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+2019-03-09 14:56:38 WARN  NativeCodeLoader:62 - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+[2019-03-09 14:56:41,983] Testing the model performance
+[2019-03-09 14:56:54,179] 49352                                                 
+root
+ |-- bathrooms: double (nullable = true)
+ |-- bedrooms: double (nullable = true)
+ |-- building_id: string (nullable = true)
+ |-- created: double (nullable = true)
+ |-- description: string (nullable = true)
+ |-- display_address: string (nullable = true)
+ |-- featuresList: array (nullable = true)
+ |    |-- element: string (containsNull = true)
+ |-- latitude: double (nullable = true)
+ |-- listing_id: long (nullable = true)
+ |-- longitude: double (nullable = true)
+ |-- manager_id: string (nullable = true)
+ |-- photos: array (nullable = true)
+ |    |-- element: string (containsNull = true)
+ |-- price: double (nullable = true)
+ |-- street_address: string (nullable = true)
+ |-- label: integer (nullable = true)
+
++---------+--------+--------------------+-------------+--------------------+-------------------+--------------------+--------+----------+---------+--------------------+--------------------+------+--------------------+-----+
+|bathrooms|bedrooms|         building_id|      created|         description|    display_address|        featuresList|latitude|listing_id|longitude|          manager_id|              photos| price|      street_address|label|
++---------+--------+--------------------+-------------+--------------------+-------------------+--------------------+--------+----------+---------+--------------------+--------------------+------+--------------------+-----+
+|      1.5|     3.0|53a5b119ba8f7b61d...|1.466780064E9|A Brand New 3 Bed...|Metropolitan Avenue|                  []| 40.7145|   7211212| -73.9425|5ba989232d0489da1...|[https://photos.r...|3000.0|792 Metropolitan ...|    1|
+|      1.0|     2.0|c5c8a357cba207596...|1.465759167E9|                    |    Columbus Avenue|[Doorman, Elevato...| 40.7947|   7150865| -73.9667|7533621a882f71e25...|[https://photos.r...|5465.0| 808 Columbus Avenue|    2|
+|      1.0|     1.0|c3ba40552e2120b0a...|1.460888801E9|Top Top West Vill...|        W 13 Street|[Laundry In Build...| 40.7388|   6887163| -74.0018|d9039c43983f6e564...|[https://photos.r...|2850.0|     241 W 13 Street|    0|
+|      1.0|     1.0|28d9ad350afeaab80...|1.460971322E9|Building Amenitie...|   East 49th Street|[Hardwood Floors,...| 40.7539|   6888711| -73.9677|1067e078446a7897d...|[https://photos.r...|3275.0|333 East 49th Street|    2|
+|      1.0|     4.0|                   0|1.461832361E9|Beautifully renov...|  West 143rd Street|           [Pre-War]| 40.8241|   6934781| -73.9493|98e13ad4b495b9613...|[https://photos.r...|3350.0|500 West 143rd St...|    2|
+|      2.0|     4.0|38a913e46c94a7f46...|1.461065087E9|                    |   West 18th Street|                  []| 40.7429|   6894514| -74.0028|b209e2c4384a64cc3...|[https://photos.r...|7995.0|350 West 18th Street|    1|
+|      1.0|     2.0|3ba49a93260ca5df9...|1.461752396E9|Stunning unit wit...|  West 107th Street|[prewar, elevator...| 40.8012|   6930771|  -73.966|01287194f20de5187...|[https://photos.r...|3600.0|210 West 107th St...|    2|
+|      2.0|     1.0|0372927bcb6a09496...|1.460552502E9|This huge sunny ,...|   West 21st Street|[Doorman, Elevato...| 40.7427|   6867392| -73.9957|e6472c7237327dd39...|[https://photos.r...|5645.0|155 West 21st Street|    2|
+|      1.0|     1.0|a7efbeb58190aa267...|1.461144995E9|<p><a  website_re...|   Hamilton Terrace|[Cats Allowed, Do...| 40.8234|   6898799| -73.9457|c1a6598437b7db560...|[https://photos.r...|1725.0| 63 Hamilton Terrace|    1|
+|      2.0|     4.0|                   0|1.459591095E9|This is a spaciou...|         522 E 11th|[Dishwasher, Hard...| 40.7278|   6814332| -73.9808|23a01ea7717b38875...|[https://photos.r...|5800.0|          522 E 11th|    2|
++---------+--------+--------------------+-------------+--------------------+-------------------+--------------------+--------+----------+---------+--------------------+--------------------+------+--------------------+-----+
+only showing top 10 rows
+
+[2019-03-09 14:56:55,239] Using the RandomForest
+[2019-03-09 14:56:55,272] pipeline stages used: [Imputer_50afe6974449, OutlierSmoother_d57aee2c17d5, VectorAssembler_1d2e0b37f587, GaussianMixture_3c285badee68, OneHotEncoder_89b694f76ed3, DescriptionWorks_f2ea7b11f250, TextFeaturesKMeansCluster_fcd8c0a863d2, VectorAssembler_4c4047deac34, RandomForestClassifier_c5ebfc10c6c9]
+[2019-03-09 14:57:01,750] 32 outliers in column 'latitude' has been smoothened  
+[2019-03-09 14:57:03,061] 215 outliers in column 'longitude' has been smoothened
+[2019-03-09 14:57:04,225] 700 outliers in column 'out_price' has been smoothened
+[2019-03-09 15:03:36,798] 7 outliers in column 'latitude' has been smoothened   
+[2019-03-09 15:03:37,154] 35 outliers in column 'longitude' has been smoothened
+[2019-03-09 15:03:37,512] 171 outliers in column 'out_price' has been smoothened
+[2019-03-09 15:05:31,369] the logloss is: 0.7709193421074793                    
+[2019-03-09 15:05:32,376] 32 outliers in column 'latitude' has been smoothened
+[2019-03-09 15:05:33,090] 215 outliers in column 'longitude' has been smoothened
+[2019-03-09 15:05:33,807] 700 outliers in column 'out_price' has been smoothened
+[2019-03-09 15:12:15,562] 7 outliers in column 'latitude' has been smoothened   
+[2019-03-09 15:12:15,844] 35 outliers in column 'longitude' has been smoothened
+[2019-03-09 15:12:16,123] 171 outliers in column 'out_price' has been smoothened
+[2019-03-09 15:14:12,719] the logloss is: 0.7743852869333169                    
+[2019-03-09 15:14:15,510] 29 outliers in column 'latitude' has been smoothened  
+[2019-03-09 15:14:16,270] 202 outliers in column 'longitude' has been smoothened
+[2019-03-09 15:14:17,067] 710 outliers in column 'out_price' has been smoothened
+[2019-03-09 15:20:47,455] 10 outliers in column 'latitude' has been smoothened  
+[2019-03-09 15:20:47,847] 55 outliers in column 'longitude' has been smoothened
+[2019-03-09 15:20:48,168] 168 outliers in column 'out_price' has been smoothened
+[2019-03-09 15:22:41,439] the logloss is: 0.7613800532174587                    
+[2019-03-09 15:22:42,425] 29 outliers in column 'latitude' has been smoothened
+[2019-03-09 15:22:43,151] 202 outliers in column 'longitude' has been smoothened
+[2019-03-09 15:22:43,861] 710 outliers in column 'out_price' has been smoothened
+[2019-03-09 15:29:14,800] 10 outliers in column 'latitude' has been smoothened  
+[2019-03-09 15:29:15,024] 55 outliers in column 'longitude' has been smoothened
+[2019-03-09 15:29:15,301] 168 outliers in column 'out_price' has been smoothened
+[2019-03-09 15:30:50,616] the logloss is: 0.7542537569495661                    
+[2019-03-09 15:30:53,703] 29 outliers in column 'latitude' has been smoothened  
+[2019-03-09 15:30:54,499] 197 outliers in column 'longitude' has been smoothened
+[2019-03-09 15:30:55,315] 716 outliers in column 'out_price' has been smoothened
+[2019-03-09 15:36:52,307] 10 outliers in column 'latitude' has been smoothened  
+[2019-03-09 15:36:52,658] 58 outliers in column 'longitude' has been smoothened
+[2019-03-09 15:36:52,923] 168 outliers in column 'out_price' has been smoothened
+[2019-03-09 15:38:34,717] the logloss is: 0.7844733908549981                    
+[2019-03-09 15:38:35,637] 29 outliers in column 'latitude' has been smoothened
+[2019-03-09 15:38:36,350] 197 outliers in column 'longitude' has been smoothened
+[2019-03-09 15:38:37,052] 716 outliers in column 'out_price' has been smoothened
+[2019-03-09 15:44:44,049] 10 outliers in column 'latitude' has been smoothened  
+[2019-03-09 15:44:44,285] 58 outliers in column 'longitude' has been smoothened
+[2019-03-09 15:44:44,551] 168 outliers in column 'out_price' has been smoothened
+[2019-03-09 15:46:25,943] the logloss is: 0.7817935607156614                    
+[2019-03-09 15:46:28,343] 31 outliers in column 'latitude' has been smoothened  
+[2019-03-09 15:46:28,927] 195 outliers in column 'longitude' has been smoothened
+[2019-03-09 15:46:29,582] 699 outliers in column 'out_price' has been smoothened
+[2019-03-09 15:52:25,428] 8 outliers in column 'latitude' has been smoothened   
+[2019-03-09 15:52:25,802] 51 outliers in column 'longitude' has been smoothened
+[2019-03-09 15:52:26,115] 181 outliers in column 'out_price' has been smoothened
+[2019-03-09 15:54:10,584] the logloss is: 0.7722272209856768                    
+[2019-03-09 15:54:11,507] 31 outliers in column 'latitude' has been smoothened
+[2019-03-09 15:54:12,218] 195 outliers in column 'longitude' has been smoothened
+[2019-03-09 15:54:12,935] 699 outliers in column 'out_price' has been smoothened
+[2019-03-09 16:00:16,857] 8 outliers in column 'latitude' has been smoothened   
+[2019-03-09 16:00:17,092] 51 outliers in column 'longitude' has been smoothened
+[2019-03-09 16:00:17,346] 181 outliers in column 'out_price' has been smoothened
+[2019-03-09 16:01:54,474] the logloss is: 0.7628969450324107                    
+[2019-03-09 16:01:56,703] 35 outliers in column 'latitude' has been smoothened  
+[2019-03-09 16:01:57,310] 201 outliers in column 'longitude' has been smoothened
+[2019-03-09 16:01:57,937] 696 outliers in column 'out_price' has been smoothened
+[2019-03-09 16:07:52,519] 4 outliers in column 'latitude' has been smoothened   
+[2019-03-09 16:07:52,856] 52 outliers in column 'longitude' has been smoothened
+[2019-03-09 16:07:53,118] 182 outliers in column 'out_price' has been smoothened
+[2019-03-09 16:09:32,943] the logloss is: 0.7714624303429347                    
+[2019-03-09 16:09:33,687] 35 outliers in column 'latitude' has been smoothened
+[2019-03-09 16:09:34,283] 201 outliers in column 'longitude' has been smoothened
+[2019-03-09 16:09:34,881] 696 outliers in column 'out_price' has been smoothened
+[2019-03-09 16:15:33,172] 4 outliers in column 'latitude' has been smoothened   
+[2019-03-09 16:15:33,432] 52 outliers in column 'longitude' has been smoothened
+[2019-03-09 16:15:33,691] 182 outliers in column 'out_price' has been smoothened
+[2019-03-09 16:17:21,000] the logloss is: 0.7704010914822187                    
+[2019-03-09 16:17:24,231] 39 outliers in column 'latitude' has been smoothened  
+[2019-03-09 16:17:26,423] 255 outliers in column 'longitude' has been smoothened
+[2019-03-09 16:17:28,189] 878 outliers in column 'out_price' has been smoothened
+[2019-03-09 16:27:39,924] 10 outliers in column 'latitude' has been smoothened  
+[2019-03-09 16:27:40,963] 58 outliers in column 'longitude' has been smoothened 
+[2019-03-09 16:27:42,063] 214 outliers in column 'out_price' has been smoothened
++----------+-----+------------------------------------------------------------+----------+
+|listing_id|label|probability                                                 |prediction|
++----------+-----+------------------------------------------------------------+----------+
+|6876836   |2    |[0.06665522866046505,0.2282137278771738,0.7051310434623611] |2.0       |
+|6888819   |2    |[0.10046211838507821,0.2718289389978925,0.6277089426170294] |2.0       |
+|6901384   |2    |[0.06791650330413088,0.21493719503050937,0.7171463016653598]|2.0       |
+|6924210   |2    |[0.07335852414213868,0.24565601027706546,0.6809854655807959]|2.0       |
+|6942044   |2    |[0.08574981218803449,0.1946503858366792,0.7195998019752863] |2.0       |
+|6952152   |2    |[0.06992238477392936,0.17374258120284122,0.7563350340232294]|2.0       |
+|6957149   |2    |[0.0777767917211595,0.25833904942312647,0.6638841588557141] |2.0       |
+|6969310   |0    |[0.12152595424546289,0.21166777812727644,0.6668062676272606]|2.0       |
+|6983886   |2    |[0.07505700537271406,0.2344752828708308,0.6904677117564553] |2.0       |
+|7010455   |2    |[0.0614033591642988,0.2039589576935208,0.7346376831421805]  |2.0       |
++----------+-----+------------------------------------------------------------+----------+
+only showing top 10 rows
+
+[2019-03-09 16:31:58,118] Test Error = 0.301581                                 
+[2019-03-09 16:32:55,013] Log Loss = 0.758548                                   
+[2019-03-09 16:33:18,411] Here is the confusion matrix with both row and column indices as: high, medium, low
+[2019-03-09 16:33:18,411] [[   0    0  752]
+ [   0    0 2224]
+ [   0    0 6892]]
+[2019-03-09 16:33:18,424] Printing the feature importances
+[2019-03-09 16:33:18,424] (1026,[0,1,3,4,9,10,13,15,25,26,27,31,32,36,38,40,41,43,44,45,46,47,48,49,50,51,58,59,61,63,68,70,76,77,87,92,93,95,102,104,106,108,109,115,116,117,122,124,129,136,141,143,144,151,152,153,156,162,164,169,170,174,178,179,180,200,204,213,220,236,244,248,257,258,260,265,273,280,282,286,293,294,299,301,303,304,305,308,314,318,323,327,329,331,334,346,354,357,359,361,366,369,373,399,400,403,451,452,461,466,473,489,492,504,516,517,530,531,534,541,548,551,576,588,592,615,631,634,635,637,649,658,701,724,743,744,760,769,783,792,794,850,868,898,908,914,941,962,972,1005,1013],[0.024658412037841887,0.0027198491570497594,0.15674078594207275,0.001584491551341425,0.00015823507978396365,0.04018198163905607,0.006687734422390666,0.04433015602897252,0.0006893799923923892,0.015616457316237366,0.05193989257906116,0.07228901479928986,0.025860752208316313,0.0015043348864671943,0.014196189101979765,0.0031492041050934626,0.0046519708280007965,0.017915797593393415,0.00027628489326532435,0.00021237428083747644,0.003688248789580266,0.01279879038110141,0.0007889670071629769,0.0030735243010008313,0.007985253287366996,0.0030762085875818915,0.0006019985493838901,0.0004013323662559268,0.0007093147743319286,0.0008302309960526644,0.003883717095060407,0.001681048455011043,0.015794262936690943,0.00019261754767002127,0.0013614710261236136,0.001090467941138219,0.0006191982753653407,0.0004241024286811842,0.0015320405720532283,0.0012398135003449011,0.0011559780787449676,0.00011193401571444785,0.0006494468561102851,0.0026928585022644954,0.004169061326560077,0.0020130079051227474,0.005441621933287128,0.0019845608745663154,0.0013772556228226892,0.006418332488912322,0.008757660588949409,0.0047627432743362515,0.0005227827610987288,0.00020393069274494166,0.0014645177178165554,0.0021132213067307968,0.00043151509534836873,0.0010007654799184611,0.006518757180963175,0.005945451631764056,0.000610411316068196,0.0017542333207743687,0.0007463975838963106,0.0008137373214382088,0.0010366406816125723,0.002024096310583789,0.005055345184658906,0.01105975472184334,0.004181151526102076,0.0009181063085958808,0.0001547219258798822,0.0009750045766848991,0.0038121672742348596,0.0003616524801434954,0.012949090027891743,0.003548523520306605,0.07358922885154953,0.025339800504351355,4.078613854898832e-05,0.007478070979387928,0.0016659871414267443,0.0001806243278598055,0.0009801801880476094,0.0005275994711365043,0.004698394491361452,0.0011538268563867414,0.002658055309283338,0.011527172592572897,0.0005746889957981855,0.0014422536545506894,0.0021705352700543625,0.05244349226735162,0.001261587615497515,0.0006291430774720764,0.001421921795036721,0.011254145220826073,0.00031985648319596624,0.011324132842376102,0.0009342896142590072,0.00023253764421645617,0.0004499217228964768,0.0031737866983171706,0.0036875100880385753,0.002981900245644501,0.0010504973665440465,0.0013745930084343876,0.002078056703446126,0.0005362532187294292,0.0013156444154295115,0.0008355457154552568,0.0033998109282921698,0.0007745601769959308,0.0014291151530604908,0.0013207927099668536,0.0006617245368987235,0.001283908278397643,0.0048406813334541995,0.001118440376281829,0.00039393651245401743,0.001210223593400375,0.0004766376873228362,0.0013338717553302256,0.012966423650982,0.001385949432009187,0.0033773150587077393,0.0005560228251919302,0.000544775843163426,0.0011675123381990596,0.0008280424802630838,0.0026848446101576206,0.0018709460591262322,0.0006146051090683488,0.014377837117059793,0.0013155080855056856,0.0019470641874717806,0.002601560041666248,0.006751852007572797,0.0009799513845180233,0.0012907310315379114,0.005128329482387963,0.01332861468843353,0.0033515086784151097,0.0012734272607924277,0.002900380617355186,0.0004925797043971731,0.003403283239493126,0.0005190572415545911,0.0006456571975210275,0.004559961370275552,0.0006854058109664166,0.00400278521357621])
