@@ -11,5 +11,6 @@ predictionOutput.csv
 *.ipynb
 !Report.ipynb
 !rentalPrice_jonas.ipynb
+!DrewPRentalListing.ipynb
 **/__pycache__
 __pycache__
