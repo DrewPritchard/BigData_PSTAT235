@@ -1,5 +1,5 @@
 from pyspark.ml.feature import Imputer
-from pyspark.ml.classification import LogisticRegression, OneVsRest, RandomForestClassifier
+from pyspark.ml.classification import LogisticRegression, OneVsRest, RandomForestClassifier, DecisionTreeClassifier
 from FeaturesMakers import *
 from pyspark.ml.feature import VectorAssembler
 from pyspark.ml.tuning import ParamGridBuilder
@@ -83,7 +83,11 @@ class PipConfig(object):
             rf = RandomForestClassifier(numTrees=10)
             self.paramGrid = ParamGridBuilder().addGrid(gmm.k, [2, 5]).addGrid(rf.maxDepth, [2,4,10]).build()
             self.estimator = rf
-
+        if self.method == "DecisionTree":
+            Logger.logger.info("Using the DecisionTree")
+            dt = DecisionTreeClassifier()
+            self.paramGrid = ParamGridBuilder().addGrid(dt.maxDepth, [3, 8]).build()
+            self.estimator = dt
         self.stages = [imputer,
                        outlierSmoother,
                        assemblerForGMM,
